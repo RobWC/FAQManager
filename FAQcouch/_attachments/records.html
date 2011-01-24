@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FAQ Manager</title>
+    <style type="text/css">
+    <!--
+    p.nodata {
+      display: none;
+    }
+    -->
+    </style>
+  </head>
+  <body>
+    <a href="index.html">Home</a>
+    <h1>Add record</h1>
+    <form id="tester">
+      Question: <textarea id="question"rows="10" cols="80" name="question"></textarea><br/>
+      Answer:   <textarea id="answer" rows="10" cols="80" name="answer"></textarea><br/>
+      Category: <select id="category" name="category"><option value=""></option></select>
+      <input id="addCategoryButt" type="button" value="+ Category" name="categoryButton"/><br>
+      + Category: <div id="addCategoryDiv"></div>
+      <input id="createButton" type="button" value="Add Record" name="submitButton"/>
+    </form>
+    <p id="nodata" class="nodata">You must enter a question, answer, and category.</p>
+    <p id="success" class="nodata">Item successfully added.</p>
+  </body>
+  <script src="vendor/couchapp/loader.js"></script>
+  <script>
+    //On startup for document
+    jQuery(document).ready(function($){
+      //grab all of the categories
+      //var returned = new Object();
+      //$.couch.db('faqcouch').view('FAQcouch/categories');
+      //console.log(returned);
+      $.getJSON('_view/categories/', function(data){
+        var array = data.rows;
+        $.each(array, function(i, item){
+          $("#category").append('<option value="' + array[i].key + '">'+ array[i].key + '</option>');
+        });
+      });
+    });
+    //handle events
+    $("#createButton").evently({
+      click: function(){
+        if ($("#question").val() != '' && $("#answer").val() != '' && $("#category").val() != '') {
+          var newItem = new Object();
+          newItem.category = new Array();
+          newItem.question = $("#question").val();
+          newItem.answer = $("#answer").val();
+          //pull all categories
+          $.each($('select'), function(i,item){
+            newItem.category.push($(item).val());
+          });
+          //newItem.category = $("#category").val();
+          $.couch.db('faqcouch').saveDoc(newItem);
+          $("#addCategoryDiv").empty().fadeOut("slow");
+          $("#question").val('');
+          $("#answer").val('');
+          $("#category").val('');
+          $("#success").show("slow").delay(2000);
+          $("#success").hide("slow");
+        } else {
+          $("#nodata").show("slow").delay(2000);
+          $("#nodata").hide("slow");
+        };
+      }
+    });
+    $("#addCategoryButt").evently({
+      click: function() {
+        $.getJSON('_view/categories/', function(data){
+          var array = data.rows;
+          var completeHtml = new String();
+          completeHtml = '<select id="categoryAdd" name="category"><option value=""></option>'
+          $.each(array, function(i, item){
+            completeHtml = completeHtml + '<option value="' + array[i].key + '">'+ array[i].key + '</option>'
+          });
+          $("#addCategoryDiv").append(completeHtml + '</select><br>');
+        });
+      }
+    });
+  </script>
+</html>
