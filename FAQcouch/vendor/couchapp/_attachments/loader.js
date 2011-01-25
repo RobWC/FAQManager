@@ -5,13 +5,25 @@ function couchapp_load(scripts) {
   };
 };
 
+function couchapp_load_css(css) {
+  for (var i=0; i < css.length; i++) {
+    document.write('<link rel="stylesheet" href="'+ css[i]+'"><\/script>')
+  };
+};
+
+couchapp_load_css([
+  "css/smoothness/jquery-ui-1.8.9.custom.css"
+]);
+
 couchapp_load([
   "/_utils/script/sha1.js",
   "/_utils/script/json2.js",
-  "/_utils/script/jquery.js",
+  "js/jquery-1.4.4.min.js",
+  //"/_utils/script/jquery.js",
   "/_utils/script/jquery.couch.js",
   "vendor/couchapp/jquery.couch.app.js",
   "vendor/couchapp/jquery.couch.app.util.js",
   "vendor/couchapp/jquery.mustache.js",
-  "vendor/couchapp/jquery.evently.js"
+  "vendor/couchapp/jquery.evently.js",
+  "js/jquery-ui-1.8.9.custom.min.js"
 ]);
