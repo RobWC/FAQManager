@@ -2,16 +2,7 @@
 <html>
 <head>
     <title>FAQ List</title>
-    <style type="text/css">
-    a.gray {
-            color:  #A9A9A9
-        }
-    p, span {
-        font-size: 12px;
-    }
-    </style>
-    <script src="vendor/couchapp/loader.js" type="text/javascript">
-</script>
+    <script src="vendor/couchapp/loader.js" type="text/javascript"></script>
     <script type="text/javascript">
 //when document is ready do stuff
         
@@ -97,18 +88,16 @@
                     
                     var i;
                     for (i in array){
-                        $("#faqTable").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"><td>' + array[i].value.question + '<\/td><td>' + array[i].value.answer + '<\/td><td>' + array[i].value.category + '<\/td><td><a id="detail' + i.toString() + '" href="">Detail<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
+                        var css;
+                        if (isEven(i)) {
+                            css = 'class="even"';   
+                        } else {
+                            css = 'class="odd"';
+                        };
+                        $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td>' + array[i].value.question + '<\/td><td>' + array[i].value.answer + '<\/td><td>' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
                     };
-                                            
-                    $("#faqTable tbody > tr > td a[id^='delete']").evently({
-                        click: function() {
-                            var rowID = $('#' + this.id).parent().parent().attr('id');
-                            var rowRev = $('#' + this.id).parent().parent().attr('data-rev');
-                            removeDocument(rowID, rowRev);
-                            return false;
-                        }
-                    });
                     
+
                     $("#faqTable tbody > tr > td a[id^='detail']").evently({
                         click: function() {
                             if ($('#dialog').dialog('isOpen')) {
@@ -127,12 +116,23 @@
                                 if (data._id) {
                                     $('#dialog').append('<p><b>Question: </b>' + data.question + '</p><p><b>Answer: </b>' + data.answer + '</p><p><b>Category: </b>' + data.category + '</p>');
                                 };
+                                
                             });
                             //set title
                             //set question
                             //set answer
                             //set categories
                             $('#dialog').dialog('open');
+                            return false;
+                        }
+                    });
+                    
+                    $("#faqTable tbody > tr > td a[id^='delete']").evently({
+                        click: function() {
+                            var rowID = $('#' + this.id).parent().parent().attr('id');
+                            var rowRev = $('#' + this.id).parent().parent().attr('data-rev');
+                            removeDocument(rowID, rowRev);
+                            //renormalize the colors
                             return false;
                         }
                     });
@@ -192,6 +192,8 @@
                     }
                 }
             });
+            
+                    
         
             //respond to combo box change
             $("#category").evently({
@@ -221,6 +223,15 @@
                 //remove clicked element
                 return false;
             };
+            
+            function isEven(value) {
+                if (value%2 == 0) {
+                    return true;
+                } else {
+                    return false;
+                };
+            };
+
             
             function prevNextShading(nextPageLinkAccess,prevPageLinkAccess) {
                 //determine if shading
@@ -271,13 +282,17 @@
     </div>
 
 
-    <h1 id="title">FAQ List</h1><b>Select Single Category:</b><select id="category" name="category">
-        <option value="">
-            Show All
-        </option>
-    </select>
-
-    <table id="faqTable" border="1">
+    <h1 id="title" class="title">FAQ List</h1>
+    
+    <div class="titleCat">
+        <b>Select Single Category: </b><select id="category" name="category">
+            <option value="">
+                Show All
+            </option>
+        </select>
+    </div>
+    
+    <table id="faqTable">
         <thead>
             <tr>
                 <th>Question</th>
@@ -286,11 +301,18 @@
                 <th>Actions</th>
             </tr>
         </thead>
+        <tbody id="main">
+        </tbody>
+        <tbody class="footer">
+            <tr>
+                <td colspan="4">
+                    <div id="nextPrev"><a id="prevPageLink" href="" name="prevPageLink">&lt;- Prev</a><a id="nextPageLink" href="" name="nextPageLink">Next -&gt;</a></div>
+                </td>
+            </tr>
+        </tbody>
     </table>
 
-    <div id="nextPrev">
-        <a id="prevPageLink" href="" name="prevPageLink">&lt;- Prev</a><a id="nextPageLink" href="" name="nextPageLink">Next -&gt;</a>
-    </div>
+   
 
 </body>
 </html>

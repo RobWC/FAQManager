@@ -12,6 +12,7 @@ function couchapp_load_css(css) {
 };
 
 couchapp_load_css([
+  "css/main.css",
   "css/smoothness/jquery-ui-1.8.9.custom.css"
 ]);
 
