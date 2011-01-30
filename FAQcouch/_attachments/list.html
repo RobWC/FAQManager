@@ -30,11 +30,12 @@
                 var getData = new Object();
                 //set the number of items
                 if (activatingElement) {
-                    items = 5;
+                    items = $('#rowCount').val();
                 } else {
-                    items = 5;
+                    items = $('#rowCount').val();
                 };
                 getData.limit = items;
+                getData.skip = 1;
                 //setting the default docs
                 var firstDoc, lastDoc;
                 //setting the default view
@@ -209,6 +210,21 @@
                    
                 }
             });
+            
+            //respond to combo box change
+            $("#rowCount").evently({
+                change: function(){
+                    
+                    var elementId = this.id;
+                    
+                    if ($("#category").val() != '') {
+                        getContent($("#category").val().toLowerCase(),elementId);
+                    } else {
+                        getContent('',elementId);
+                    };
+                   
+                }
+            });
                 
             function removeDocument(id,rev){
                 jQid = '#'+ id
@@ -306,7 +322,7 @@
         <tbody class="footer">
             <tr>
                 <td colspan="4">
-                    <div id="nextPrev"><a id="prevPageLink" href="" name="prevPageLink">&lt;- Prev</a><a id="nextPageLink" href="" name="nextPageLink">Next -&gt;</a></div>
+                    <div id="nextPrev"><a id="prevPageLink" href="" name="prevPageLink">&lt;- Prev</a> <select id="rowCount"><option>5</option><option>10</option><option>20</option></select> <a id="nextPageLink" href="" name="nextPageLink">Next -&gt;</a></div>
                 </td>
             </tr>
         </tbody>
