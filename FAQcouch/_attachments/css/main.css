@@ -6,6 +6,10 @@ a {
     font-size: 90%;
     font-family: Verdana,Arial,sans-serif;
 }
+div#dialog {
+    font-size: 12px;
+    font-family: Verdana,Arial,sans-serif;
+}
 div#nextPrev {
     float: right;
 }
@@ -86,4 +90,7 @@ a.gray {
 }*/
 p, span {
     font-size: 12px;
+}
+textarea {
+    width: 100%;
 }
