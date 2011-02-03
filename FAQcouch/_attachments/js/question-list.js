@@ -180,45 +180,6 @@ jQuery(document).ready(function($){
                 }
             });
             
-            /* function prevNextShading(nextPageLinkAccess,prevPageLinkAccess) {
-                    console.log('prevNext ' + nextPageLinkAccess + ' ' + prevPageLinkAccess);
-                    //determine if shading
-                    //detering if going forward or backwards
-                    //if forwards then calculate the offset from 0 to total rows
-                    //if backwards then calculate the offset from total (top) to 0
-                    //decide on how to shade next link
-                    if (nextPageLinkAccess) {
-            $('#nextPageLink').removeAttr('href');
-            $('#nextPageLink').attr('href',' ');
-            if ($('#nextPageLink').hasClass('gray') == true) {
-                $('#nextPageLink').removeClass('gray');
-            };
-                    } else {
-            if ($('#nextPageLink').attr('href') != true) {
-                $('#nextPageLink').addClass('gray');
-            };
-            if ($('#nextPageLink').attr('href') != true) {
-                $('#nextPageLink').removeAttr('href');
-            };
-                    };
-                    
-                    //decide on how to shade prev link
-                    if (prevPageLinkAccess) {
-            $('#prevPageLink').removeAttr('href');
-            $('#prevPageLink').attr('href',' ');
-            if ($('#prevPageLink').hasClass('gray') == true) {
-                $('#prevPageLink').removeClass('gray');
-            };
-                    } else {
-            if ($('#prevPageLink').hasClass('gray') != true) {
-                $('#prevPageLink').addClass('gray');
-            };
-            if ($('#prevPageLink').attr('href') != true) {
-                $('#prevPageLink').removeAttr('href');    
-            };
-                    };
-                }; */
-            
             if (activatingElement == 'nextPageLink') {
                 //next clicked
                 if (offset + items < totalRows) {
@@ -400,9 +361,35 @@ jQuery(document).ready(function($){
         //save the changes
         $('#dialogSaveControls #save').click(function(){alert('woot')});
         //revert to original
-        $('#dialogSaveControls #clear').click(function(){alert('clear')});
+        $('#dialogSaveControls #clear').click(function(){
+            //grab original content
+            //delete the textareas
+            //insert content data-question,data-answer
+            var question = $("#hiddenQuestion").attr('data-question');
+            var answer = $("#hiddenAnswer").attr('data-answer');
+            var categories = $("#hiddenCategories").attr('data-categories');
+            
+            if (question != null) {
+                $("#dialogQuestion").empty();
+                $("#dialogQuestion").append(question).wrap('<p/>');
+
+            };
+            
+            if (answer != null) {
+                $("#dialogAnswer").empty();
+                $("#dialogAnswer").append(answer).wrap('<p/>');
+            };
+            
+            if (categories != null) {
+                $("#dialogCategory").empty();
+                //add categories
+            };
+            
+        });
         //cancel all changes and
-        $('#dialogSaveControls #cancel').click(function(){alert('cancel')});
+        $('#dialogSaveControls #cancel').click(function(){
+            $('#dialog').dialog('close');
+        });
     };
     
 });
