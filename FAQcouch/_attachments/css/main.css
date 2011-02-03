@@ -92,5 +92,6 @@ p, span {
     font-size: 12px;
 }
 textarea {
+    height: auto;
     width: 100%;
 }

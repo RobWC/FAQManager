@@ -6,7 +6,7 @@ jQuery(document).ready(function($){
     $.getJSON('_view/categories/', function(data){
         var array = data.rows;
         $.each(array, function(i, item){
-            $("#category").append('<option value="' + array[i].key + '">'+ array[i].key + '<\/option>');
+            $("#category").append('<option value="' + array[i].key + '">  '+ array[i].key + '<\/option>');
         });
     });
     
@@ -16,20 +16,21 @@ jQuery(document).ready(function($){
     
     function getContent(category,activatingElement) {
         //total items to gather
-        var items;
-        
         //get the next set of elements
-        var totalRows = 0;
-        var offset = 0;
         var getData = new Object();
         //set the number of items
+        
         if (activatingElement) {
-            items = $('#rowCount').val();
+            //activated by element
+            getData.limit = $('#rowCount').val();
+            if (activatingElement != 'category') {
+                getData.skip = 1;
+            }
         } else {
-            items = $('#rowCount').val();
+            //inital get
+            getData.limit = $('#rowCount').val();
         };
-        getData.limit = items;
-        getData.skip = 1;
+       
         //setting the default docs
         var firstDoc, lastDoc;
         //setting the default view
@@ -70,11 +71,9 @@ jQuery(document).ready(function($){
             var array = new Array();
             array = data.rows;
             
-            offset = data.offset;
-            totalRows = data.total_rows;
-            
-            var nextPageLinkAccess;
-            var prevPageLinkAccess;
+            var offset = parseFloat(data.offset);
+            var totalRows = parseFloat(data.total_rows);
+            var items = parseFloat($('#rowCount').val());
             
             if (activatingElement == 'prevPageLink') {   
                 //reverse sort
@@ -180,44 +179,144 @@ jQuery(document).ready(function($){
                     return false;
                 }
             });
-
+            
+            /* function prevNextShading(nextPageLinkAccess,prevPageLinkAccess) {
+                    console.log('prevNext ' + nextPageLinkAccess + ' ' + prevPageLinkAccess);
+                    //determine if shading
+                    //detering if going forward or backwards
+                    //if forwards then calculate the offset from 0 to total rows
+                    //if backwards then calculate the offset from total (top) to 0
+                    //decide on how to shade next link
+                    if (nextPageLinkAccess) {
+            $('#nextPageLink').removeAttr('href');
+            $('#nextPageLink').attr('href',' ');
+            if ($('#nextPageLink').hasClass('gray') == true) {
+                $('#nextPageLink').removeClass('gray');
+            };
+                    } else {
+            if ($('#nextPageLink').attr('href') != true) {
+                $('#nextPageLink').addClass('gray');
+            };
+            if ($('#nextPageLink').attr('href') != true) {
+                $('#nextPageLink').removeAttr('href');
+            };
+                    };
+                    
+                    //decide on how to shade prev link
+                    if (prevPageLinkAccess) {
+            $('#prevPageLink').removeAttr('href');
+            $('#prevPageLink').attr('href',' ');
+            if ($('#prevPageLink').hasClass('gray') == true) {
+                $('#prevPageLink').removeClass('gray');
+            };
+                    } else {
+            if ($('#prevPageLink').hasClass('gray') != true) {
+                $('#prevPageLink').addClass('gray');
+            };
+            if ($('#prevPageLink').attr('href') != true) {
+                $('#prevPageLink').removeAttr('href');    
+            };
+                    };
+                }; */
+            
             if (activatingElement == 'nextPageLink') {
-                if (totalRows > offset + items) {
-                    nextPageLinkAccess = true;
+                //next clicked
+                if (offset + items < totalRows) {
+                    $('#nextPageLink').removeAttr('href');
+                    $('#nextPageLink').attr('href',' ');
+                    if ($('#nextPageLink').hasClass('gray') == true) {
+                        $('#nextPageLink').removeClass('gray');
+                    };
                 } else {
-                    nextPageLinkAccess = false;  
-                };
-                if (offset + 1 >= items) {
-                    prevPageLinkAccess = true;
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').addClass('gray');
+                    };
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').removeAttr('href');
+                    };
+                }
+                
+                //set previous: Can I go back?
+                if (offset >= 1) {
+                    $('#prevPageLink').removeAttr('href');
+                    $('#prevPageLink').attr('href',' ');
+                    if ($('#prevPageLink').hasClass('gray') == true) {
+                        $('#prevPageLink').removeClass('gray');
+                    };
                 } else {
-                    prevPageLinkAccess = false;  
+                    if ($('#prevPageLink').hasClass('gray') != true) {
+                        $('#prevPageLink').addClass('gray');
+                    };
+                    if ($('#prevPageLink').attr('href') != true) {
+                        $('#prevPageLink').removeAttr('href');    
+                    };    
                 };
             } else if (activatingElement == 'prevPageLink') {
-                if (offset + 1 <= totalRows) {
-                    nextPageLinkAccess = true;
+                 if (offset + items < totalRows) {
+                    $('#prevPageLink').removeAttr('href');
+                    $('#prevPageLink').attr('href',' ');
+                    if ($('#prevPageLink').hasClass('gray') == true) {
+                        $('#prevPageLink').removeClass('gray');
+                    };
                 } else {
-                    nextPageLinkAccess = false;  
-                };
+                    if ($('#prevPageLink').hasClass('gray') != true) {
+                        $('#prevPageLink').addClass('gray');
+                    };
+                    if ($('#prevPageLink').attr('href') != true) {
+                        $('#prevPageLink').removeAttr('href');    
+                    };    
+                }
                 
-                if (totalRows >= offset + items + 1) {
-                    prevPageLinkAccess = true;
+                //set previous: Can I go back?
+                if (offset >= 1) {
+                    $('#nextPageLink').removeAttr('href');
+                    $('#nextPageLink').attr('href',' ');
+                    if ($('#nextPageLink').hasClass('gray') == true) {
+                        $('#nextPageLink').removeClass('gray');
+                    };
                 } else {
-                    prevPageLinkAccess = false;  
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').addClass('gray');
+                    };
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').removeAttr('href');
+                    }; 
                 };
             } else {
-                if (totalRows > offset + items) {
-                    nextPageLinkAccess = true;
+                //next clicked
+                if (offset + items < totalRows) {
+                    $('#nextPageLink').removeAttr('href');
+                    $('#nextPageLink').attr('href',' ');
+                    if ($('#nextPageLink').hasClass('gray') == true) {
+                        $('#nextPageLink').removeClass('gray');
+                    };
                 } else {
-                    nextPageLinkAccess = false;  
-                };
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').addClass('gray');
+                    };
+                    if ($('#nextPageLink').attr('href') != true) {
+                        $('#nextPageLink').removeAttr('href');
+                    };
+                }
                 
+                //set previous: Can I go back?
                 if (offset >= items) {
-                    prevPageLinkAccess = true;
+                    $('#prevPageLink').removeAttr('href');
+                    $('#prevPageLink').attr('href',' ');
+                    if ($('#prevPageLink').hasClass('gray') == true) {
+                        $('#prevPageLink').removeClass('gray');
+                    };
                 } else {
-                    prevPageLinkAccess = false;  
-                };
-            };
-            prevNextShading(nextPageLinkAccess,prevPageLinkAccess,false);
+                    if ($('#prevPageLink').hasClass('gray') != true) {
+                        $('#prevPageLink').addClass('gray');
+                    };
+                    if ($('#prevPageLink').attr('href') != true) {
+                        $('#prevPageLink').removeAttr('href');    
+                    };    
+                };    
+            }
+            
+            //prevNextShading(nextPageLinkAccess,prevPageLinkAccess,false);
         });    
     };
     
@@ -306,41 +405,4 @@ jQuery(document).ready(function($){
         $('#dialogSaveControls #cancel').click(function(){alert('cancel')});
     };
     
-    function prevNextShading(nextPageLinkAccess,prevPageLinkAccess) {
-        //determine if shading
-        //detering if going forward or backwards
-        //if forwards then calculate the offset from 0 to total rows
-        //if backwards then calculate the offset from total (top) to 0
-        //decide on how to shade next link
-        if (nextPageLinkAccess) {
-            $('#nextPageLink').removeAttr('href');
-            $('#nextPageLink').attr('href',' ');
-            if ($('#nextPageLink').hasClass('gray') == true) {
-                $('#nextPageLink').removeClass('gray');
-            };
-        } else {
-            if ($('#nextPageLink').attr('href') != true) {
-                $('#nextPageLink').addClass('gray');
-            };
-            if ($('#nextPageLink').attr('href') != true) {
-                $('#nextPageLink').removeAttr('href');
-            };
-        };
-        
-        //decide on how to shade prev link
-        if (prevPageLinkAccess) {
-            $('#prevPageLink').removeAttr('href');
-            $('#prevPageLink').attr('href',' ');
-            if ($('#prevPageLink').hasClass('gray') == true) {
-                $('#prevPageLink').removeClass('gray');
-            };
-        } else {
-            if ($('#prevPageLink').hasClass('gray') != true) {
-                $('#prevPageLink').addClass('gray');
-            };
-            if ($('#prevPageLink').attr('href') != true) {
-                $('#prevPageLink').removeAttr('href');    
-            };
-        };
-    };
 });
