@@ -111,6 +111,7 @@ jQuery(document).ready(function($){
                         
                         $("#dialogQuestion").evently({
                             dblclick: function(){
+                                 $("#dialogQuestion");
                                 //take text and place into text area
                                 $("div#dialogQuestion").contents().filter(function() {
                                     var content = this.textContent;

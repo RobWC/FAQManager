@@ -10,7 +10,7 @@
         
         var i; //pages
         for (i = 1;i <= 15; i++) {
-            $.getJSON('http://search.twitter.com/search.json?q=pants&result_type=recent&page=' + i + '&rpp=' + maxRpp + '&callback=?',function(data){
+            $.getJSON('http://search.twitter.com/search.json?q=russia&result_type=recent&page=' + i + '&rpp=' + maxRpp + '&callback=?',function(data){
                 console.log(data);
             });    
         };

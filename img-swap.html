@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
+<html>
+<head>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript">
+</script>
+
+        <title></title>
+</head>
+
+<body>
+        <script type="text/javascript">
+        $(document).ready(function() {
+                function addAfterB(pElement) {
+                        if (!$('#b ~ p')) {
+                                $(pElement).insertAfter('#b');        
+                        } else if ($('#b ~ p')) {
+                                $('#b ~ p').remove();
+                                $(pElement).insertAfter('#b')
+                        }        
+                }
+                addAfterB('<p>New Item 1</p>');
+                
+        });
+        </script>
+
+        <div id="a">
+                <div id="b"></div>
+                <p>hello</p>
+        <div>
+</body>
+</html>
