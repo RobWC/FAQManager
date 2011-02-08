@@ -99,16 +99,17 @@ jQuery(document).ready(function($){
                         
                     };
                     
-                    $('#dialog').empty();
-                    
+                    $('#dialog').empty();     
                     
                     var rowID = $('#' + this.id).parent().parent().attr('id');
                     
                     $.getJSON('/faqcouch/' + rowID, function(data){
+                        
                         if (data._id) {
-                            $('#dialog').append('<p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
+                            $('#dialog').append('<div id="dialogContent" data-id="' + data._id + '" data-rev="' + data._rev + '"><p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
                         };
                         
+                        //events for dialogQuestion
                         $("#dialogQuestion").evently({
                             dblclick: function(){
                                  $("#dialogQuestion");
@@ -127,6 +128,7 @@ jQuery(document).ready(function($){
                             }
                         });
                         
+                        //events for dialogAnswer
                         $("#dialogAnswer").evently({
                             dblclick: function(){
                                 //take text and place into text area
@@ -144,7 +146,8 @@ jQuery(document).ready(function($){
                             }
                         });
                         
-                         $("#dialogCategory").evently({
+                        //event for dialogCategory
+                        $("#dialogCategory").evently({
                             dblclick: function(){
                                 //figure this out
                                 $("div#dialogQuestion").contents().filter(function() {
@@ -171,6 +174,7 @@ jQuery(document).ready(function($){
                 }
             });
             
+            //event handler for the click button
             $("#faqTable tbody > tr > td a[id^='delete']").evently({
                 click: function() {
                     var rowID = $('#' + this.id).parent().parent().attr('id');
@@ -181,6 +185,7 @@ jQuery(document).ready(function($){
                 }
             });
             
+            //handle if the next page link href was clicked
             if (activatingElement == 'nextPageLink') {
                 //next clicked
                 if (offset + items < totalRows) {
@@ -213,6 +218,7 @@ jQuery(document).ready(function($){
                         $('#prevPageLink').removeAttr('href');    
                     };    
                 };
+            //handler if the prev page link button was clicked
             } else if (activatingElement == 'prevPageLink') {
                  if (offset + items < totalRows) {
                     $('#prevPageLink').removeAttr('href');
@@ -285,16 +291,14 @@ jQuery(document).ready(function($){
     //respond to questions getting clicked
     $("div#nextPrev a").evently({
         click: function() {
-            
             var elementId = this.id;
-            
             if ($('#' + elementId).hasClass('gray')) {
                 //ignore if gray
             } else {
                //use get content
                 getContent($("#category").val().toLowerCase(),elementId);
                 return false;
-            }
+            };
         }
     });
     
@@ -329,7 +333,8 @@ jQuery(document).ready(function($){
            
         }
     });
-        
+    
+    //used to delete a document from the grid view
     function removeDocument(id,rev){
         jQid = '#'+ id
         jQuery.ajax({
@@ -344,15 +349,17 @@ jQuery(document).ready(function($){
         return false;
     };
     
+    //used to determine if the row is even or odd
     function isEven(value) {
         if (value%2 == 0) {
             return true;
         } else {
             return false;
         };
-
+        return false;
     };
     
+    //adds buttions on the dialog pop up for further details on an FAQ entry
     function addDialogButtons() {
         //append HTML div
         $('#dialog').append('<div id="dialogSaveControls"><p> <button id="save">Save Changes</button> <button id="clear">Clear</button> <button id="cancel">Cancel</button> </p></div>');
@@ -360,7 +367,35 @@ jQuery(document).ready(function($){
         //ok button
         $('#dialogSaveControls #save, #dialogSaveControls #clear, #dialogSaveControls #cancel').button();
         //save the changes
-        $('#dialogSaveControls #save').click(function(){alert('woot')});
+        $('#dialogSaveControls #save').click(function(){
+            //define content
+            var question, answer;
+            //grab question content
+            if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
+                question = $('#dialogContent #dialogQuestion textarea').val();
+            } else if ($('#dialogContent #dialogQuestion').text() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
+                question = $('#dialogContent #dialogQuestion').text();
+            } else {
+                //unable to save question as it is blang
+                alert('explode');
+            };
+            //grab answer
+            if ($('#dialogContent #dialogAnswer textarea').val() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
+                answer = $('#dialogContent #dialogAnswer textarea').val();
+            } else if ($('#dialogContent #dialogAnswer').text() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
+                answer = $('#dialogContent #dialogAnswer').text();
+            } else {
+                //unable to save answer as it is blang
+                alert('explode answer');
+            };
+            //var categories
+            var rev = $('#dialogConent').attr('data-rev');
+            var id = $('#dialogConent').attr('data-id');
+            //grab the values of the current fields
+            //save
+            //alert user that the save was successful
+            //post data
+        });
         //revert to original
         $('#dialogSaveControls #clear').click(function(){
             //grab original content
