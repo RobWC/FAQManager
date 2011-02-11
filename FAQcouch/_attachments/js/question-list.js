@@ -2,6 +2,8 @@
         
 jQuery(document).ready(function($){
     
+    //setup boxes
+    
     //load categories
     $.getJSON('_view/categories/', function(data){
         var array = data.rows;
@@ -112,7 +114,6 @@ jQuery(document).ready(function($){
                         //events for dialogQuestion
                         $("#dialogQuestion").evently({
                             dblclick: function(){
-                                 $("#dialogQuestion");
                                 //take text and place into text area
                                 $("div#dialogQuestion").contents().filter(function() {
                                     var content = this.textContent;
@@ -150,12 +151,21 @@ jQuery(document).ready(function($){
                         $("#dialogCategory").evently({
                             dblclick: function(){
                                 //figure this out
-                                $("div#dialogQuestion").contents().filter(function() {
-                                    var content = this.textContent;
-                                    $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
-                                    return this.textContent }).wrap('<textarea class="editDialog" width="400"/>');
+                                $("div#dialogCategory").contents().filter(function() {
+                                    $("div#dialogCategory").empty();
+                                    $("div#dialog").append('<div id="catSel"></div>');
+                                    $("#catSel").append('<ol id="selectable"/>');
+                                    $.getJSON('_view/categories/', function(data){
+                                        var array = data.rows;
+                                        $.each(array, function(i, item){
+                                            $("#catSel ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                                        });
+                                    });
+                                    $('#selectable').selectable();
+
+                                });
                                 //test for controls
-                                if ($('#dialogSaveControls').length()) {
+                                if ($('#dialogSaveControls').length) {
                                     //do nothing
                                 } else {
                                     addDialogButtons();
@@ -362,7 +372,7 @@ jQuery(document).ready(function($){
     //adds buttions on the dialog pop up for further details on an FAQ entry
     function addDialogButtons() {
         //append HTML div
-        $('#dialog').append('<div id="dialogSaveControls"><p> <button id="save">Save Changes</button> <button id="clear">Clear</button> <button id="cancel">Cancel</button> </p></div>');
+        $('#dialog').append('<div id="dialogSaveControls"><p> <button class="dialogButtons" id="save">Save Changes</button> <button class="dialogButtons" id="clear">Clear</button> <button class="dialogButtons" id="cancel">Cancel</button> </p></div>');
         //activate jqueryui buttons
         //ok button
         $('#dialogSaveControls #save, #dialogSaveControls #clear, #dialogSaveControls #cancel').button();
@@ -373,7 +383,7 @@ jQuery(document).ready(function($){
             //grab question content
             if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
                 question = $('#dialogContent #dialogQuestion textarea').val();
-            } else if ($('#dialogContent #dialogQuestion').text() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
+            } else if ($('#dialogContent #dialogQuestion').text() && ($('#dialogContent #dialogQuestion textarea').val() == '' || $('#dialogContent #dialogQuestion textarea').val() == undefined)) {
                 question = $('#dialogContent #dialogQuestion').text();
             } else {
                 //unable to save question as it is blang
@@ -382,7 +392,7 @@ jQuery(document).ready(function($){
             //grab answer
             if ($('#dialogContent #dialogAnswer textarea').val() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
                 answer = $('#dialogContent #dialogAnswer textarea').val();
-            } else if ($('#dialogContent #dialogAnswer').text() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
+            } else if ($('#dialogContent #dialogAnswer').text() && ($('#dialogContent #dialogAnswer textarea').val() == '' || $('#dialogContent #dialogAnswer textarea').val() == undefined)) {
                 answer = $('#dialogContent #dialogAnswer').text();
             } else {
                 //unable to save answer as it is blang

@@ -95,3 +95,11 @@ textarea {
     height: 200px;
     width: 100%;
 }
+.dialogButtons {
+    float: left;
+}
+#feedback { font-size: 1.4em; }
+#selectable .ui-selecting { background: #FECA40; }
+#selectable .ui-selected { background: #F39814; color: white; }
+#selectable { list-style-type: none; margin: 0; padding: 0; }
+#selectable li { margin: 3px; padding: 1px; float: left; width: 120px; height: 40px;  font-size: 1em; text-align: center; }
