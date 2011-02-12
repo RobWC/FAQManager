@@ -135,7 +135,6 @@ jQuery(document).ready(function($){
                                 //take text and place into text area
                                 $("div#dialogAnswer").contents().filter(function() {
                                     var content = this.textContent;
-                                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
                                     return this.textContent }).wrap('<textarea class="editDialog" width="400"/>');
                                 //test for controls
                                 if ($('#dialogSaveControls').length) {
@@ -152,13 +151,26 @@ jQuery(document).ready(function($){
                             dblclick: function(){
                                 //figure this out
                                 $("div#dialogCategory").contents().filter(function() {
+                                    var content = this.textContent;
                                     $("div#dialogCategory").empty();
-                                    $("div#dialog").append('<div id="catSel"></div>');
-                                    $("#catSel").append('<ol id="selectable"/>');
+                                    $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
+                                    var currentCategories = content.split(',');
+                                    console.log(currentCategories);
+                                    $("div#dialogCategory").append('<ol id="selectable"/>');
                                     $.getJSON('_view/categories/', function(data){
                                         var array = data.rows;
                                         $.each(array, function(i, item){
-                                            $("#catSel ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                                            var x;
+                                            var match = new Boolean(false);
+                                            for (x in currentCategories) {
+                                                if (currentCategories[x] ==  array[i].key) {
+                                                    $("#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
+                                                    match = true;
+                                                };
+                                            };
+                                            if (match == false) {
+                                                $("#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                                            };
                                         });
                                     });
                                     $('#selectable').selectable();
@@ -379,32 +391,57 @@ jQuery(document).ready(function($){
         //save the changes
         $('#dialogSaveControls #save').click(function(){
             //define content
-            var question, answer;
+            var documentUpdate = {question:'',answer:'',category:[],_rev:'',_id:''};
             //grab question content
             if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
-                question = $('#dialogContent #dialogQuestion textarea').val();
+                documentUpdate.question = $('#dialogContent #dialogQuestion textarea').val();
             } else if ($('#dialogContent #dialogQuestion').text() && ($('#dialogContent #dialogQuestion textarea').val() == '' || $('#dialogContent #dialogQuestion textarea').val() == undefined)) {
-                question = $('#dialogContent #dialogQuestion').text();
+                documentUpdate.question = $('#dialogContent #dialogQuestion').text();
             } else {
                 //unable to save question as it is blang
                 alert('explode');
             };
             //grab answer
             if ($('#dialogContent #dialogAnswer textarea').val() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
-                answer = $('#dialogContent #dialogAnswer textarea').val();
+                documentUpdate.answer = $('#dialogContent #dialogAnswer textarea').val();
             } else if ($('#dialogContent #dialogAnswer').text() && ($('#dialogContent #dialogAnswer textarea').val() == '' || $('#dialogContent #dialogAnswer textarea').val() == undefined)) {
-                answer = $('#dialogContent #dialogAnswer').text();
+                documentUpdate.answer = $('#dialogContent #dialogAnswer').text();
             } else {
                 //unable to save answer as it is blang
                 alert('explode answer');
             };
             //var categories
-            var rev = $('#dialogConent').attr('data-rev');
-            var id = $('#dialogConent').attr('data-id');
+            if ($('div#dialogCategory ol li.ui-selected') == undefined) {
+                $('div#dialogCategory ol li.ui-selected').each(function(index){
+                    console.log($(this).text());
+                    documentUpdate.category.push($(this).text());
+                });    
+            } else {
+                documentUpdate.category = $("div#dialogCategory").text().split(',');
+            };
+            
+            documentUpdate._rev = $('#dialogContent').attr('data-rev');
+            documentUpdate._id = $('#dialogContent').attr('data-id');
+            console.log(documentUpdate);
+            //send the final updatee
+            $.couch.db('faqcouch').saveDoc(documentUpdate);
+            /*$.ajax({
+                url: '/faqcouch/' + documentUpdate.id,
+                contentType: 'application/json',
+                data: documentUpdate,
+                type: 'POST',
+                dataType: 'json',
+                success: function(){
+                    alert('success');
+                }
+                
+            });*/
             //grab the values of the current fields
             //save
             //alert user that the save was successful
             //post data
+            //close the dialog
+            //update the record on the screen
         });
         //revert to original
         $('#dialogSaveControls #clear').click(function(){
@@ -428,6 +465,7 @@ jQuery(document).ready(function($){
             
             if (categories != null) {
                 $("#dialogCategory").empty();
+                $("#dialogCategory").append(categories).wrap('<p/>');
                 //add categories
             };
             
