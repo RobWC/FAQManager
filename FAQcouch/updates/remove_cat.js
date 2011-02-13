@@ -12,9 +12,13 @@ function(doc, req) {
             erased = erased + 1;
         }
     }
+    if (docCategories.length == 0) {
+        docCategories.push('None');
         //if category is empty then leave it blank
+    }
     //save changes
     //respond that the cat was removed
+    doc.category = docCategories;
     
     return [doc, erased + ' erased'];
 }
