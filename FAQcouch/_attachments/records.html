@@ -27,7 +27,9 @@
   <script src="vendor/couchapp/loader.js"></script>
   <script>
     //On startup for document
+    
     jQuery(document).ready(function($){
+      
       var databaseName = 'faq';
       
       $.getJSON('_view/categories/', function(data){
@@ -36,45 +38,48 @@
           $("#category").append('<option value="' + array[i].key + '">'+ array[i].key + '</option>');
         });
       });
+    
+      $("#createButton").evently({
+      click: function(){
+          if ($("#question").val() != '' && $("#answer").val() != '' && $("#category").val() != '') {
+            var newItem = new Object();
+            newItem.category = new Array();
+            newItem.question = $("#question").val();
+            newItem.answer = $("#answer").val();
+            //pull all categories
+            $.each($('select'), function(i,item){
+              newItem.category.push($(item).val());
+            });
+            //newItem.category = $("#category").val();
+            $.couch.db(databaseName).saveDoc(newItem);
+            $("#addCategoryDiv").empty().fadeOut("slow");
+            $("#question").val('');
+            $("#answer").val('');
+            $("#category").val('');
+            $("#success").show("slow").delay(2000);
+            $("#success").hide("slow");
+          } else {
+            $("#nodata").show("slow").delay(2000);
+            $("#nodata").hide("slow");
+          };
+        }
+      });
+      $("#addCategoryButt").evently({
+        click: function() {
+          $.getJSON('_view/categories/', function(data){
+            var array = data.rows;
+            var completeHtml = new String();
+            completeHtml = '<select id="categoryAdd" name="category"><option value=""></option>'
+            $.each(array, function(i, item){
+              completeHtml = completeHtml + '<option value="' + array[i].key + '">'+ array[i].key + '</option>'
+            });
+            $("#addCategoryDiv").append(completeHtml + '</select><br>');
+          });
+        }
+      });
+    
     });
     //handle events
-    $("#createButton").evently({
-      click: function(){
-        if ($("#question").val() != '' && $("#answer").val() != '' && $("#category").val() != '') {
-          var newItem = new Object();
-          newItem.category = new Array();
-          newItem.question = $("#question").val();
-          newItem.answer = $("#answer").val();
-          //pull all categories
-          $.each($('select'), function(i,item){
-            newItem.category.push($(item).val());
-          });
-          //newItem.category = $("#category").val();
-          $.couch.db(databaseName).saveDoc(newItem);
-          $("#addCategoryDiv").empty().fadeOut("slow");
-          $("#question").val('');
-          $("#answer").val('');
-          $("#category").val('');
-          $("#success").show("slow").delay(2000);
-          $("#success").hide("slow");
-        } else {
-          $("#nodata").show("slow").delay(2000);
-          $("#nodata").hide("slow");
-        };
-      }
-    });
-    $("#addCategoryButt").evently({
-      click: function() {
-        $.getJSON('_view/categories/', function(data){
-          var array = data.rows;
-          var completeHtml = new String();
-          completeHtml = '<select id="categoryAdd" name="category"><option value=""></option>'
-          $.each(array, function(i, item){
-            completeHtml = completeHtml + '<option value="' + array[i].key + '">'+ array[i].key + '</option>'
-          });
-          $("#addCategoryDiv").append(completeHtml + '</select><br>');
-        });
-      }
-    });
+    
   </script>
 </html>
