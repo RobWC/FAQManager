@@ -2,6 +2,9 @@
   "env": {
     "default": {
       "db" : "http://localhost:5984/faqcouch"
+    },
+    "cloudant": {
+      "db" : "https://junosrob:HappY123CloudinG123@junosrob.cloudant.com/faq"
     }
   }
 }

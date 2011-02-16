@@ -1,5 +1,6 @@
 //On startup for document
 jQuery(document).ready(function($){
+  var databaseName = 'faq';
   //just incase you need to do something on startup
    //handle events
   $("#createButton").evently({
@@ -8,13 +9,13 @@ jQuery(document).ready(function($){
         var newItem = new Object();
         //fix the name
         newItem.categoryName = $("#category").val();
-        $.couch.db('faqcouch').saveDoc(newItem);
+        $.couch.db(databaseName).saveDoc(newItem);
         var data = '{"_id":"_design/' + newItem.categoryName.toLowerCase() + '","views": {"' + newItem.categoryName.toLowerCase() + '": { "map": "function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}';
         $("#category").val('');
         //add view here
         $.ajax({
             type: 'POST',
-            url: '/faqcouch',
+            url: '/' + databaseName,
             dataType: 'json',
             contentType: 'application/json',
             data: data,
@@ -50,12 +51,12 @@ jQuery(document).ready(function($){
             var catRev = $('#' + this.id).parent().parent().attr('data-rev');
             var dataSend = { "category": catName };
             
-            $.getJSON('/faqcouch/_design/' + catName.toLowerCase() +  '/_view/' + catName.toLowerCase(), function(data){
+            $.getJSON('/' + databaseName + '/_design/' + catName.toLowerCase() +  '/_view/' + catName.toLowerCase(), function(data){
               //delete the category from all documents
               var array = data.rows;
               $.each(array, function(i,item){
                   $.ajax({
-                    url: '/faqcouch/_design/FAQcouch/_update/remove_cat/' + array[i].value._id + '?category=' + catName.toLowerCase(),
+                    url: '/' + databaseName + '/_design/FAQcouch/_update/remove_cat/' + array[i].value._id + '?category=' + catName.toLowerCase(),
                     type: 'PUT',
                     contentType: 'application/json',
                     success: function () {
@@ -66,12 +67,12 @@ jQuery(document).ready(function($){
             });
             //delete the view
               //get the view's rev
-            $.getJSON('/faqcouch/_design/' + catName.toLowerCase(), function(data){
+            $.getJSON('/' + databaseName + '/_design/' + catName.toLowerCase(), function(data){
               var rev = data._rev;
               //detete the view  
               $.ajax({
                   type: "DELETE",
-                  url: '/faqcouch/_design/' + catName.toLowerCase() + '?rev=' + rev ,
+                  url: '/' + databaseName + '/_design/' + catName.toLowerCase() + '?rev=' + rev ,
                   contentType: 'application/json',
                   success: function(){
                           //pop up little window saying its deleted
@@ -82,7 +83,7 @@ jQuery(document).ready(function($){
             //detete the cat document
             $.ajax({
                 type: "DELETE",
-                url: '/faqcouch/' + catID + '?rev=' + catRev,
+                url: '/' + databaseName + '/' + catID + '?rev=' + catRev,
                 success: function(){
                         //pop up little window saying its deleted
                         $('#' + catID).fadeOut('slow');
@@ -102,7 +103,7 @@ function removeDocument(id,rev){
     jQid = '#'+ id
     jQuery.ajax({
         type: "DELETE",
-        url: '/faqcouch/' + id + '?rev=' + rev,
+        url: '/' + databaseName + '/' + id + '?rev=' + rev,
         success: function(){
                 //pop up little window saying its deleted
                 jQuery(jQid).fadeOut('slow');

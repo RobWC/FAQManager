@@ -28,10 +28,8 @@
   <script>
     //On startup for document
     jQuery(document).ready(function($){
-      //grab all of the categories
-      //var returned = new Object();
-      //$.couch.db('faqcouch').view('FAQcouch/categories');
-      //console.log(returned);
+      var databaseName = 'faq';
+      
       $.getJSON('_view/categories/', function(data){
         var array = data.rows;
         $.each(array, function(i, item){
@@ -52,7 +50,7 @@
             newItem.category.push($(item).val());
           });
           //newItem.category = $("#category").val();
-          $.couch.db('faqcouch').saveDoc(newItem);
+          $.couch.db(databaseName).saveDoc(newItem);
           $("#addCategoryDiv").empty().fadeOut("slow");
           $("#question").val('');
           $("#answer").val('');

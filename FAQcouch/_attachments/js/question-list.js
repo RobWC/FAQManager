@@ -2,6 +2,8 @@
         
 jQuery(document).ready(function($){
     
+    var databaseName = 'faq';
+    
     //setup boxes
     
     //load categories
@@ -26,6 +28,19 @@ jQuery(document).ready(function($){
             }
         }
     });
+    
+    $('#save-nchange').dialog({
+        autoOpen: false,
+        closeOnEscape: true,
+        resizable: false,
+        modal: true,
+        buttons: {
+            Ok: function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+    
     $('#dialog').dialog({
         autoOpen: false,
         closeOnEscape: true,
@@ -36,43 +51,47 @@ jQuery(document).ready(function($){
                 //define content
                 var documentUpdate = {question:'',answer:'',category:new Array(),_rev:'',_id:''};
                 //grab question content
-                if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
-                    documentUpdate.question = $('#dialogContent #dialogQuestion textarea').val();
-                } else if ($('#dialogContent #dialogQuestion').text() && ($('#dialogContent #dialogQuestion textarea').val() == '' || $('#dialogContent #dialogQuestion textarea').val() == undefined)) {
-                    documentUpdate.question = $('#dialogContent #dialogQuestion').text();
-                } else {
-                    //unable to save question as it is blang
-                };
-                //grab answer
-                if ($('#dialogContent #dialogAnswer textarea').val() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
-                    documentUpdate.answer = $('#dialogContent #dialogAnswer textarea').val();
-                } else if ($('#dialogContent #dialogAnswer').text() && ($('#dialogContent #dialogAnswer textarea').val() == '' || $('#dialogContent #dialogAnswer textarea').val() == undefined)) {
-                    documentUpdate.answer = $('#dialogContent #dialogAnswer').text();
-                } else {
-                    //unable to save answer as it is blang
-                };
-                //var categories
-                if ($('div#dialogCategory ol#selectable') != undefined) {
-                    if ($('div#dialogCategory ol li.ui-selected')) {
-                        $('div#dialogCategory ol li.ui-selected').each(function(index){
-                            documentUpdate.category.push($(this).text());
-                        });    
+                if ($('#dialogContent').attr('data-changed') == 'true') {
+                    if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
+                        documentUpdate.question = $('#dialogContent #dialogQuestion textarea').val();
+                    } else if ($('#dialogContent #dialogQuestion').text() && ($('#dialogContent #dialogQuestion textarea').val() == '' || $('#dialogContent #dialogQuestion textarea').val() == undefined)) {
+                        documentUpdate.question = $('#dialogContent #dialogQuestion').text();
                     } else {
-                            documentUpdate.category.push('None');    
-                    }
+                        //unable to save question as it is blang
+                    };
+                    //grab answer
+                    if ($('#dialogContent #dialogAnswer textarea').val() && $('#dialogContent #dialogAnswer textarea').val() != '' && $('#dialogContent #dialogAnswer textarea').val() != null) {
+                        documentUpdate.answer = $('#dialogContent #dialogAnswer textarea').val();
+                    } else if ($('#dialogContent #dialogAnswer').text() && ($('#dialogContent #dialogAnswer textarea').val() == '' || $('#dialogContent #dialogAnswer textarea').val() == undefined)) {
+                        documentUpdate.answer = $('#dialogContent #dialogAnswer').text();
+                    } else {
+                        //unable to save answer as it is blang
+                    };
+                    //var categories
+                    if ($('div#dialogCategory ol#selectable') != undefined) {
+                        if ($('div#dialogCategory ol li.ui-selected')) {
+                            $('div#dialogCategory ol li.ui-selected').each(function(index){
+                                documentUpdate.category.push($(this).text());
+                            });    
+                        } else {
+                                documentUpdate.category.push('None');    
+                        }
+                    } else {
+                        documentUpdate.category.push($("div#dialogCategory").text().split(','));
+                    };
+                    
+                    documentUpdate._rev = $('#dialogContent').attr('data-rev');
+                    documentUpdate._id = $('#dialogContent').attr('data-id');
+                    //send the final updatee
+                    var response = new Object();
+                    $.couch.db(databaseName).saveDoc(documentUpdate);
+                    console.log(documentUpdate);
+                    $('#save-dialog').dialog("open");
+                    //refresh source line
                 } else {
-                    documentUpdate.category = $("div#dialogCategory").text().split(',');
-                };
-                
-                documentUpdate._rev = $('#dialogContent').attr('data-rev');
-                documentUpdate._id = $('#dialogContent').attr('data-id');
-                //send the final updatee
-                var response = new Object();
-                $.couch.db('faqcouch').saveDoc(documentUpdate);
-                console.log(documentUpdate);
-                $('#save-dialog').dialog("open");
-                //refresh source line
-                },
+                    $('#save-nchange').dialog("open");
+                };    
+            },
             "Clear": function() {
                 //grab original content
                 //delete the textareas
@@ -136,9 +155,9 @@ jQuery(document).ready(function($){
         
         //grab the current category
         if (category == 'none') {
-            view = '/faqcouch/_design/FAQcouch/_view/none_category';
+            view = '/databaseName/_design/FAQcouch/_view/none_category';
         } else if (category != '') {
-            view = '/faqcouch/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
+            view = '/databaseName/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
         } else {
             //default already set
             view = '_view/questions_list';
@@ -196,7 +215,7 @@ jQuery(document).ready(function($){
                     
                     var rowID = $('#' + this.id).parent().parent().attr('id');
                     
-                    $.getJSON('/faqcouch/' + rowID, function(data){
+                    $.getJSON('/' + databaseName + '/' + rowID, function(data){
                         
                         if (data._id) {
                             $('#dialog').append('<div id="dialogContent" data-id="' + data._id + '" data-rev="' + data._rev + '"><p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
@@ -207,6 +226,7 @@ jQuery(document).ready(function($){
                             dblclick: function(){
                                 //take text and place into text area
                                 $("div#dialogQuestion").contents().filter(function() {
+                                    $("div#dialogContent").attr('data-changed','true');
                                     var content = this.textContent;
                                     $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
                                     return this.textContent
@@ -220,6 +240,7 @@ jQuery(document).ready(function($){
                             dblclick: function(){
                                 //take text and place into text area
                                 $("div#dialogAnswer").contents().filter(function() {
+                                    $("div#dialogContent").attr('data-changed','true');
                                     var content = this.textContent;
                                     return this.textContent
                                 }).wrap('<textarea class="editDialog" width="400"/>'); 
@@ -227,15 +248,15 @@ jQuery(document).ready(function($){
                         });
                         
                         //event for dialogCategory
-                        $("#dialogCategory").evently({
+                        $("div#dialogCategory").evently({
                             dblclick: function(){
                                 //figure this out
                                 $("div#dialogCategory").contents().filter(function() {
                                     var content = this.textContent;
+                                    $("div#dialogContent").attr('data-changed','true');
                                     $("div#dialogCategory").empty();
                                     $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
                                     var currentCategories = content.split(',');
-                                    console.log(currentCategories);
                                     $("div#dialogCategory").append('<ol id="selectable"/>');
                                     $.getJSON('_view/categories/', function(data){
                                         var array = data.rows;
@@ -244,17 +265,16 @@ jQuery(document).ready(function($){
                                             var match = new Boolean(false);
                                             for (x in currentCategories) {
                                                 if (currentCategories[x] ==  array[i].key) {
-                                                    $("#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
+                                                    $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
                                                     match = true;
                                                 };
                                             };
                                             if (match == false) {
-                                                $("#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                                                $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
                                             };
                                         });
                                     });
                                     $('#selectable').selectable();
-
                                 });
                             }
                         });
@@ -431,7 +451,7 @@ jQuery(document).ready(function($){
         jQid = '#'+ id
         jQuery.ajax({
             type: "DELETE",
-            url: '/faqcouch/' + id + '?rev=' + rev,
+            url: '/' + databaseName + '/' + id + '?rev=' + rev,
             success: function(){
                     //pop up little window saying its deleted
                     jQuery(jQid).fadeOut('slow');
