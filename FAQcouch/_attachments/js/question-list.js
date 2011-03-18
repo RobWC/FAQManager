@@ -155,9 +155,9 @@ jQuery(document).ready(function($){
         
         //grab the current category
         if (category == 'none') {
-            view = '/databaseName/_design/FAQcouch/_view/none_category';
+            view = '/' + databaseName + '/_design/FAQcouch/_view/none_category';
         } else if (category != '') {
-            view = '/databaseName/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
+            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
         } else {
             //default already set
             view = '_view/questions_list';

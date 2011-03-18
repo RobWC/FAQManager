@@ -1,28 +1,35 @@
 //On startup for document
 jQuery(document).ready(function($){
+
+  //set the database name for the application. This needs to be fixed. So it will be automatic.
   var databaseName = 'faq';
+  
   //just incase you need to do something on startup
-   //handle events
+  
+   //setup event handlers
   $("#createButton").evently({
     click: function() {
       if ($("#category").val() != '') {
+      
+      	//create error handler
+      	new options = new Object();
+      	options.error = function() {
+      		alert('failed to create category');
+      	};
+      
         var newItem = new Object();
         //fix the name
         newItem.categoryName = $("#category").val();
-        $.couch.db(databaseName).saveDoc(newItem);
+        newItem.type = 'category';
+        $.couch.db(databaseName).saveDoc(newItem, options);
+        
         var data = '{"_id":"_design/' + newItem.categoryName.toLowerCase() + '","views": {"' + newItem.categoryName.toLowerCase() + '": { "map": "function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}';
+        
         $("#category").val('');
         //add view here
-        $.ajax({
-            type: 'POST',
-            url: '/' + databaseName,
-            dataType: 'json',
-            contentType: 'application/json',
-            data: data,
-            success: function(){
-                    //pop up little window saying its deleted
-            }
-        });
+        
+        $.couch.db(databaseName).saveDoc(data, options);
+        
         //say it worked.
         $("#addSuccess").show("slow").delay(2000);
         $("#addSuccess").hide("slow");
