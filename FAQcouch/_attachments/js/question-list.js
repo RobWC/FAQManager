@@ -7,15 +7,14 @@ jQuery(document).ready(function($){
     //setup boxes
     
     //load categories
-    $.getJSON('_view/categories/', function(data){
-        var array = data.rows;
-        $.each(array, function(i, item){
-            $("#category").append('<option value="' + array[i].key + '">  '+ array[i].key + '<\/option>');
-        });
+    $.get('_list/cats_as_options/categories', function(data) {
+        $("#category").append(data);
     });
     
     //load questions
     getContent('','');
+    
+    //setup dialogs
     $('#save-dialog').dialog({
         autoOpen: false,
         closeOnEscape: true,
@@ -160,7 +159,7 @@ jQuery(document).ready(function($){
             view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
         } else {
             //default already set
-            view = '_view/questions_list';
+            view = '_view/questions_list?reduce=false';
         };
         
         //ordering
@@ -396,7 +395,9 @@ jQuery(document).ready(function($){
             }
             
             //prevNextShading(nextPageLinkAccess,prevPageLinkAccess,false);
-        });    
+        });
+        //update total items
+        $('totalItems').empty();
     };
     
     //respond to questions getting clicked
