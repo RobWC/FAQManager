@@ -12,7 +12,7 @@ jQuery(document).ready(function($){
       if ($("#category").val() != '') {
       
       	//create error handler
-      	new options = new Object();
+      	var options = new Object();
       	options.error = function() {
       		alert('failed to create category');
       	};
@@ -67,7 +67,7 @@ jQuery(document).ready(function($){
                     type: 'PUT',
                     contentType: 'application/json',
                     success: function () {
-                      console.log('deleted cat from document')
+                      console.log('deleted cat from document');
                     }
                   });
                 });

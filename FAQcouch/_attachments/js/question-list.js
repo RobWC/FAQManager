@@ -82,8 +82,9 @@ jQuery(document).ready(function($){
                     documentUpdate._rev = $('#dialogContent').attr('data-rev');
                     documentUpdate._id = $('#dialogContent').attr('data-id');
                     //send the final updatee
-                    var response = new Object();
-                    $.couch.db(databaseName).saveDoc(documentUpdate);
+                    var options = new Object();
+                    options.error = function() { alert('unable to save update')};
+                    $.couch.db(databaseName).saveDoc(documentUpdate, options);
                     console.log(documentUpdate);
                     $('#save-dialog').dialog("open");
                     //refresh source line
@@ -132,9 +133,9 @@ jQuery(document).ready(function($){
         if (activatingElement) {
             //activated by element
             getData.limit = $('#rowCount').val();
-            if (activatingElement != 'category') {
+            /*if (activatingElement != 'category') {
                 getData.skip = 1;
-            }
+            }*/
         } else {
             //inital get
             getData.limit = $('#rowCount').val();
