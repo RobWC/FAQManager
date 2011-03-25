@@ -1,0 +1,7 @@
+{
+    "language":"java",
+    "views" : 
+    {
+    "index" : {"map":{"classname":"com.cloudant.indexers.TextSearch"},"reduce":"_count"}
+    }    
+}
