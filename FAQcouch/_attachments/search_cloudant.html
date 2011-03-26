@@ -22,25 +22,25 @@
                 //save search query in the queries dd
                 
                 $.getJSON('/' + databasename + '/_search?q=' + queryValue, function(data) {
-                    var rows;
+                    var rows = new Array();
                     rows = data.rows;
                     if (rows == undefined || rows == null) {
                         $("#answers").append('<tr><td>No Results Found</td></tr>');
                     } else {
-                        var i, count, css;
-                        for (i in rows) {
-                            count = count + 1;
-                            $.get('/faq/' + rows[i].id, function(data){
-                                var result;
-                                console.log(count);
-                                if (count%2 == 0) {
+                        var i;
+                        for (i in rows){
+                            var count = 0;
+                            $.get('/faq/' + rows[i].id,function(data){
+                                var css;
+                                if (isEven(count)) {
                                     css = 'even';
                                 } else {
                                     css = 'odd';
                                 };
-                                result = JSON.parse(data);
-                                $("#answers").append('<tr id="' + result._id + '" class="' + css + '"><td>' + result.question + '</td><td>' + result.answer + '</td></tr>');
-                            });
+                                count = count + 1;
+                                $("#answers").append('<tr id="' + data._id + '" class="' + css + '"><td>' + data.question + '</td><td>' + data.answer + '</td></tr>');
+                            },'json');
+                            //documentData = $.parseJSON(result.responseText);
                         }   
                     }
                });  
@@ -57,6 +57,14 @@
                 handleSubmit();   
             });
             
+            function isEven(value) {
+                if (value%2 == 0) {
+                    return true;
+                } else {
+                    return false;
+                };
+                return false;
+            };
             
         });
         </script>
