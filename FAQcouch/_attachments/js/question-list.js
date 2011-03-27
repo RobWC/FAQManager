@@ -154,14 +154,7 @@ jQuery(document).ready(function($){
         };
         
         //grab the current category
-        if (category == 'none') {
-            view = '/' + databaseName + '/_design/FAQcouch/_view/none_category';
-        } else if (category != '') {
-            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
-        } else {
-            //default already set
-            view = '_view/questions_list?reduce=false';
-        };
+        view = FAQ.getCatView(databaseName,category,false);
         
         //ordering
         if (activatingElement == 'nextPageLink') {
@@ -173,7 +166,7 @@ jQuery(document).ready(function($){
             getData.startkey = '"' + firstDoc + '"';
             //getData.startkey_docid = firstDoc;
         } else if (activatingElement == 'category') {
-            //loading new dataset
+            //loading new dataset 
         };
 
         $.getJSON(view , getData, function(data){
@@ -195,12 +188,12 @@ jQuery(document).ready(function($){
             var i;
             for (i in array){
                 var css;
-                if (isEven(i)) {
+                if (FAQ.isEven(i)) {
                     css = 'class="even"';   
                 } else {
                     css = 'class="odd"';
                 };
-                $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td>' + array[i].value.question + '<\/td><td>' + array[i].value.answer + '<\/td><td>' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
+                $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td>' + array[i].value.question + '<\/td><td>' + array[i].value.answer + '<\/td><td>' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
             };
             
 
@@ -242,6 +235,7 @@ jQuery(document).ready(function($){
                                 $("div#dialogAnswer").contents().filter(function() {
                                     $("div#dialogContent").attr('data-changed','true');
                                     var content = this.textContent;
+                                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
                                     return this.textContent
                                 }).wrap('<textarea class="editDialog" width="400"/>'); 
                             }
@@ -290,7 +284,7 @@ jQuery(document).ready(function($){
                 click: function() {
                     var rowID = $('#' + this.id).parent().parent().attr('id');
                     var rowRev = $('#' + this.id).parent().parent().attr('data-rev');
-                    removeDocument(rowID, rowRev);
+                    FAQ.removeDocument(rowID, rowRev);
                     //renormalize the colors
                     return false;
                 }
@@ -397,12 +391,29 @@ jQuery(document).ready(function($){
             
             //prevNextShading(nextPageLinkAccess,prevPageLinkAccess,false);
         });
+        
         //update total items
-        $('totalItems').empty();
+        $('#totalItems').empty();
+        //get current category
+        //var currentCat = new String();
+        var reduceView = new String();
+        reduceView = FAQ.getCatView(databaseName,$("#category").val().toLowerCase(),true);
+        //grab the total items count
+        $.get(reduceView,function(data) {
+            var count;
+            var result = $.parseJSON(data);
+            if (result.rows[0]) {
+                count = result.rows[0].value;
+            };
+            if (count != undefined || count != null) {
+                $('#totalItems').append('<p> Total Count for Current Selection: ' + count + '</p>');
+            }
+        });
+        //insert into 
     };
-    
-    //respond to questions getting clicked
-    $("div#nextPrev a").evently({
+
+    //respond to combo box change
+    $("#category, #rowCount, div#nextPrev a").evently({
         click: function() {
             var elementId = this.id;
             if ($('#' + elementId).hasClass('gray')) {
@@ -413,64 +424,20 @@ jQuery(document).ready(function($){
                 return false;
             };
             return false;
-        }
-    });
-    
-            
-
-    //respond to combo box change
-    $("#category").evently({
+        },
         change: function(){
             
             var elementId = this.id;
             
-            if ($("#category").val() != '') {
+            if (elementId == "category" && $("#category").val() != '') {
                 getContent($("#category").val().toLowerCase(),elementId);
+                return false;
             } else {
                 getContent('',elementId);
+                return false;
             };
-           
+            return false; 
         }
     });
     
-    //respond to combo box change
-    $("#rowCount").evently({
-        change: function(){
-            
-            var elementId = this.id;
-            
-            if ($("#category").val() != '') {
-                getContent($("#category").val().toLowerCase(),elementId);
-            } else {
-                getContent('',elementId);
-            };
-           
-        }
-    });
-    
-    //used to delete a document from the grid view
-    function removeDocument(id,rev){
-        jQid = '#'+ id
-        jQuery.ajax({
-            type: "DELETE",
-            url: '/' + databaseName + '/' + id + '?rev=' + rev,
-            success: function(){
-                    //pop up little window saying its deleted
-                    jQuery(jQid).fadeOut('slow');
-            }
-        });
-        //remove clicked element
-        return false;
-    };
-    
-    //used to determine if the row is even or odd
-    function isEven(value) {
-        if (value%2 == 0) {
-            return true;
-        } else {
-            return false;
-        };
-        return false;
-    };
-        
 });

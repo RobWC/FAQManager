@@ -26,5 +26,6 @@ couchapp_load([
   "vendor/couchapp/jquery.couch.app.util.js",
   "vendor/couchapp/jquery.mustache.js",
   "vendor/couchapp/jquery.evently.js",
-  "js/jquery-ui-1.8.9.custom.min.js"
+  "js/jquery-ui-1.8.9.custom.min.js",
+  "js/common.js"
 ]);
