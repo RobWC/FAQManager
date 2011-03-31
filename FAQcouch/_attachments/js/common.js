@@ -44,5 +44,45 @@ var FAQ = {
         };
         //returns the correct view
         return view;
+    },
+    textRenderer: function(text) {
+        var modifiedText;
+        modifiedText =  new String();
+        modifiedText = text;
+        modifiedText = modifiedText + ' PANTS';
+        return modifiedText;
+    },
+    textRendererSearch: function(text,searchQuery) {
+        var modifiedText;
+        modifiedText =  new String();
+        modifiedText = text;
+        //find search entry and make it bold
+        var patt = new RegExp('ig');
+        modifiedText = modifiedText;
+        return modifiedText;
+    },
+    textRendererSearch: function(text,searchQuery) {
+        // get pattern
+        var re = new RegExp(searchQuery,"gi");
+        var searchString = text;
+        
+        var matchArray;
+        var resultString = new String();
+        var first=0;var last=0;
+        
+        // find each match
+        while((matchArray = re.exec(searchString)) != null) {
+            last = matchArray.index;
+            // get all of string up to match, concatenate
+            resultString += searchString.substring(first, last);
+            // add matched, with class
+            resultString += "<span class='found'>" + matchArray[0] + "</span>";
+            first = re.lastIndex;
+        }
+        // finish off string
+        resultString += searchString.substring(first,searchString.length);
+        //resultString += "</pre>";
+        // insert into page
+        return resultString;  
     }
 };

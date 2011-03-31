@@ -98,6 +98,9 @@ textarea {
 .dialogButtons {
     float: left;
 }
+.found {
+    background-color: #faff00;
+}
 #feedback { font-size: 1.4em; }
 #selectable .ui-selecting { background: #FECA40; }
 #selectable .ui-selected { background: #F39814; color: white; }

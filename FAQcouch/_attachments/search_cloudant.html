@@ -24,7 +24,7 @@
                 $.getJSON('/' + databasename + '/_search?q=' + queryValue, function(data) {
                     var rows = new Array();
                     rows = data.rows;
-                    if (rows == undefined || rows == null) {
+                    if (rows == undefined || rows == null || rows == []) {
                         $("#answers").append('<tr><td>No Results Found</td></tr>');
                     } else {
                         var i;
@@ -32,13 +32,13 @@
                             var count = 0;
                             $.get('/faq/' + rows[i].id,function(data){
                                 var css;
-                                if (isEven(count)) {
+                                if (FAQ.isEven(count)) {
                                     css = 'even';
                                 } else {
                                     css = 'odd';
                                 };
-                                count = count + 1;
-                                $("#answers").append('<tr id="' + data._id + '" class="' + css + '"><td>' + data.question + '</td><td>' + data.answer + '</td></tr>');
+                                count++;
+                                $("#answers").append('<tr id="' + data._id + '" class="' + css + '"><td>' + FAQ.textRendererSearch(data.question,queryValue) + '</td><td>' + FAQ.textRendererSearch(data.answer,queryValue) + '</td></tr>');
                             },'json');
                             //documentData = $.parseJSON(result.responseText);
                         }   
@@ -49,22 +49,13 @@
             $('#query').keypress(function(event) {
                 if (event.which == '13') {
                     handleSubmit();
-                }
+                };
             });
             
             $("button#submit").button();
             $("button#submit").click(function(){
-                handleSubmit();   
+                handleSubmit();
             });
-            
-            function isEven(value) {
-                if (value%2 == 0) {
-                    return true;
-                } else {
-                    return false;
-                };
-                return false;
-            };
             
         });
         </script>
