@@ -1,5 +1,5 @@
 //when document is ready do stuff
-        
+
 jQuery(document).ready(function($){
     
     var databaseName = 'faq';
@@ -46,6 +46,49 @@ jQuery(document).ready(function($){
         minWidth: 500,
         resizable: false,
         buttons: {
+            "Edit": function() {
+                //start editing
+                //events for dialogQuestion
+                $("div#dialogQuestion").contents().filter(function() {
+                    $("div#dialogContent").attr('data-changed','true');
+                    var content = this.textContent;
+                    $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
+                    return this.textContent
+                }).wrap('<textarea class="editDialog" width="400"/>');
+                
+                 $("div#dialogAnswer").contents().filter(function() {
+                    $("div#dialogContent").attr('data-changed','true');
+                    var content = this.textContent;
+                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
+                    return this.textContent
+                }).wrap('<textarea class="editDialog" width="400"/>'); 
+                
+                $("div#dialogCategory").contents().filter(function() {
+                    var content = this.textContent;
+                    $("div#dialogContent").attr('data-changed','true');
+                    $("div#dialogCategory").empty();
+                    $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
+                    var currentCategories = content.split(',');
+                    $("div#dialogCategory").append('<ol id="selectable"/>');
+                    $.getJSON('_view/categories/', function(data){
+                        var array = data.rows;
+                        $.each(array, function(i, item){
+                            var x;
+                            var match = new Boolean(false);
+                            for (x in currentCategories) {
+                                if (currentCategories[x] ==  array[i].key) {
+                                    $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
+                                    match = true;
+                                };
+                            };
+                            if (match == false) {
+                                $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                            };
+                        });
+                    });
+                    $('#selectable').selectable();
+                });
+            },
             "Save Changes": function() {
                 //define content
                 var documentUpdate = {question:'',answer:'',category:new Array(),_rev:'',_id:''};
@@ -88,6 +131,17 @@ jQuery(document).ready(function($){
                     console.log(documentUpdate);
                     $('#save-dialog').dialog("open");
                     //refresh source line
+                    //select element by id
+                    //empty question
+                    $('tr[id="' + documentUpdate._id + '"] td[id="question"]').empty().fadeOut('slow');
+                    $('tr[id="' + documentUpdate._id + '"] td[id="question"]').append(documentUpdate.question).fadeIn('slow');
+                    //empty answer
+                    $('tr[id="' + documentUpdate._id + '"] td[id="answer"]').empty().fadeOut('slow');
+                    $('tr[id="' + documentUpdate._id + '"] td[id="answer"]').append(documentUpdate.answer).fadeIn('slow');
+                    //empty category
+                    $('tr[id="' + documentUpdate._id + '"] td[id="category"]').empty().fadeOut('slow');
+                    $('tr[id="' + documentUpdate._id + '"] td[id="category"]').append(documentUpdate.category).fadeIn('slow');
+                    //fade in update of each
                 } else {
                     $('#save-nchange').dialog("open");
                 };    
@@ -193,7 +247,7 @@ jQuery(document).ready(function($){
                 } else {
                     css = 'class="odd"';
                 };
-                $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td>' + array[i].value.question + '<\/td><td>' + array[i].value.answer + '<\/td><td>' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
+                $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td id="question">' + FAQ.textRenderer(array[i].value.question) + '<\/td><td id="answer">' + FAQ.textRenderer(array[i].value.answer) + '<\/td><td id="category">' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
             };
             
 
@@ -213,65 +267,6 @@ jQuery(document).ready(function($){
                         if (data._id) {
                             $('#dialog').append('<div id="dialogContent" data-id="' + data._id + '" data-rev="' + data._rev + '"><p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
                         };
-                        
-                        //events for dialogQuestion
-                        $("#dialogQuestion").evently({
-                            dblclick: function(){
-                                //take text and place into text area
-                                $("div#dialogQuestion").contents().filter(function() {
-                                    $("div#dialogContent").attr('data-changed','true');
-                                    var content = this.textContent;
-                                    $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
-                                    return this.textContent
-                                }).wrap('<textarea class="editDialog" width="400"/>');
-
-                            }
-                        });
-                        
-                        //events for dialogAnswer
-                        $("#dialogAnswer").evently({
-                            dblclick: function(){
-                                //take text and place into text area
-                                $("div#dialogAnswer").contents().filter(function() {
-                                    $("div#dialogContent").attr('data-changed','true');
-                                    var content = this.textContent;
-                                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
-                                    return this.textContent
-                                }).wrap('<textarea class="editDialog" width="400"/>'); 
-                            }
-                        });
-                        
-                        //event for dialogCategory
-                        $("div#dialogCategory").evently({
-                            dblclick: function(){
-                                //figure this out
-                                $("div#dialogCategory").contents().filter(function() {
-                                    var content = this.textContent;
-                                    $("div#dialogContent").attr('data-changed','true');
-                                    $("div#dialogCategory").empty();
-                                    $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
-                                    var currentCategories = content.split(',');
-                                    $("div#dialogCategory").append('<ol id="selectable"/>');
-                                    $.getJSON('_view/categories/', function(data){
-                                        var array = data.rows;
-                                        $.each(array, function(i, item){
-                                            var x;
-                                            var match = new Boolean(false);
-                                            for (x in currentCategories) {
-                                                if (currentCategories[x] ==  array[i].key) {
-                                                    $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
-                                                    match = true;
-                                                };
-                                            };
-                                            if (match == false) {
-                                                $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
-                                            };
-                                        });
-                                    });
-                                    $('#selectable').selectable();
-                                });
-                            }
-                        });
                         
                     });
                     $('#dialog').dialog('open');
@@ -394,6 +389,7 @@ jQuery(document).ready(function($){
         
         //update total items
         $('#totalItems').empty();
+        /*
         //get current category
         //var currentCat = new String();
         var reduceView = new String();
@@ -408,7 +404,7 @@ jQuery(document).ready(function($){
             if (count != undefined || count != null) {
                 $('#totalItems').append('<p> Total Count for Current Selection: ' + count + '</p>');
             }
-        });
+        });*/
         //insert into 
     };
 

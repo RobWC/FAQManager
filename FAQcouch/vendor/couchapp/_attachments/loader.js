@@ -21,11 +21,12 @@ couchapp_load([
   "/_utils/script/json2.js",
   //"js/jquery-1.5.min.js",
   "/_utils/script/jquery.js",
+  "js/jquery-ui-1.8.9.custom.min.js",
   "/_utils/script/jquery.couch.js",
   "vendor/couchapp/jquery.couch.app.js",
   "vendor/couchapp/jquery.couch.app.util.js",
   "vendor/couchapp/jquery.mustache.js",
   "vendor/couchapp/jquery.evently.js",
-  "js/jquery-ui-1.8.9.custom.min.js",
   "js/common.js"
+  //"ext/ext-all.js"
 ]);

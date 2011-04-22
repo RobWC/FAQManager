@@ -37,7 +37,7 @@ var FAQ = {
         if (category == 'none') {
             view = '/' + databaseName + '/_design/FAQcouch/_view/none_category?reduce=false';
         } else if (category != '') {
-            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase() + reduceString;
+            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
         } else {
             //default already set
             view = '_view/questions_list' + reduceString;
@@ -45,21 +45,79 @@ var FAQ = {
         //returns the correct view
         return view;
     },
-    textRenderer: function(text) {
-        var modifiedText;
-        modifiedText =  new String();
-        modifiedText = text;
-        modifiedText = modifiedText + ' PANTS';
-        return modifiedText;
-    },
-    textRendererSearch: function(text,searchQuery) {
-        var modifiedText;
-        modifiedText =  new String();
-        modifiedText = text;
-        //find search entry and make it bold
-        var patt = new RegExp('ig');
-        modifiedText = modifiedText;
-        return modifiedText;
+    textRenderer: function(text,highlight,wrapElement) {
+        
+        //replace specific patternss
+        var patterns = {
+            "\n":"<br>"
+        };
+        
+        function shoe(string, pattern, replace) {
+                var re = new RegExp(pattern,"gi");
+                var searchString = string;
+                var replacementString = replace;
+                
+                var matchArray;
+                var resultString = new String();
+                var first=0;var last=0;
+                
+                // find each match
+                while((matchArray = re.exec(searchString)) != null) {
+                    last = matchArray.index;
+                    // get all of string up to match, concatenate
+                    resultString += searchString.substring(first, last);
+                    // add matched, with class
+                    resultString += replacementString;
+                    first = re.lastIndex;
+                }
+                // finish off string
+                if (searchString != null) {
+                   resultString += searchString.substring(first,searchString.length);
+                };
+                // insert into page    
+            return resultString;
+        };
+        
+        var jQtext = $(wrapElement, {"html": text });
+        
+                
+        //itterate of the pattern
+        for (key in patterns) {
+            jQtext.html(shoe(jQtext.html(), key, patterns[key]));
+        };
+        
+        if (highlight) {
+          
+        };
+        
+        if (jQtext.html() != null) {
+            //minimize text
+            if (text.length > 250) {
+                var fulltext = jQtext.html();
+                var mintext = jQtext.html().slice(0,250);
+                var exp = $('<a href="#expand">...</a>');
+                var min = $('<a href="#min">X</a>');
+                var expand = function (evt) {
+                    jQtext.html(fulltext);
+                    jQtext.append(min);
+                    //evt.stopPropagation();
+                    //evt.stopImmediatePropigation();
+                    //evt.preventDefault();
+                }
+                var minimize = function(evt) {
+                    jQtext.html(mintext);
+                    jQtext.append(exp);
+                    //evt.stopPropagation();
+                    //evt.stopImmediatePropigation();
+                    //evt.preventDefault();
+                }
+                exp.click(expand);
+                min.click(minimize);
+                jQtext.html(mintext);
+                jQtext.append(exp);
+            }    
+        }
+        return jQtext;  
     },
     textRendererSearch: function(text,searchQuery) {
         // get pattern
