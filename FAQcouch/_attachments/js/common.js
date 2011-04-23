@@ -46,6 +46,7 @@ var FAQ = {
         return view;
     },
     textRenderer: function(text,highlight,wrapElement) {
+        //returns a jQuery object
         
         //replace specific patternss
         var patterns = {
@@ -87,7 +88,12 @@ var FAQ = {
         };
         
         if (highlight) {
-          
+            //extract the html from the string
+            var tempHtml = jQtext.html();
+            //loop and search through it for the highlight string
+            //highlight the string
+            //return the modified HTML
+            jQtext.html(this.textRendererSearch(tempHtml,highlight));
         };
         
         if (jQtext.html() != null) {
@@ -97,19 +103,25 @@ var FAQ = {
                 var mintext = jQtext.html().slice(0,250);
                 var exp = $('<a href="#expand">...</a>');
                 var min = $('<a href="#min">X</a>');
-                var expand = function (evt) {
+                var expand = function(evt) {
                     jQtext.html(fulltext);
                     jQtext.append(min);
                     //evt.stopPropagation();
                     //evt.stopImmediatePropigation();
-                    //evt.preventDefault();
+                    evt.preventDefault();
+                    console.log(evt);
+                    exp.click(expand);
+                    min.click(minimize);
                 }
                 var minimize = function(evt) {
                     jQtext.html(mintext);
                     jQtext.append(exp);
                     //evt.stopPropagation();
                     //evt.stopImmediatePropigation();
-                    //evt.preventDefault();
+                    evt.preventDefault();
+                    console.log(evt);
+                    exp.click(expand);
+                    min.click(minimize);
                 }
                 exp.click(expand);
                 min.click(minimize);

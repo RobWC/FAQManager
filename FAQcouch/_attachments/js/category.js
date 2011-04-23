@@ -43,7 +43,7 @@ jQuery(document).ready(function($){
   });
   
   function drawCategories() {
-    $.getJSON('_view/categories/', function(data){
+    $.getJSON('_view/categories?reduce=false', function(data){
         var array = data.rows;
         $('#categoryList tr[id]').fadeOut("slow").remove();
         $.each(array, function(i, item){

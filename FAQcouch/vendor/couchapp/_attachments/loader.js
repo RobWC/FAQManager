@@ -19,8 +19,8 @@ couchapp_load_css([
 couchapp_load([
   "/_utils/script/sha1.js",
   "/_utils/script/json2.js",
-  //"js/jquery-1.5.min.js",
-  "/_utils/script/jquery.js",
+  "js/jquery-1.5.2.min.js",
+  //"/_utils/script/jquery.js",
   "js/jquery-ui-1.8.9.custom.min.js",
   "/_utils/script/jquery.couch.js",
   "vendor/couchapp/jquery.couch.app.js",

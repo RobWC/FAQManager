@@ -6,6 +6,19 @@
   <script src="js/search.js" type="text/javascript"></script>
 </head>
 <body>
+  <script type="text/javascript">
+    //pull stats
+    var databasename = 'faq';
+    //insert to stats table as a tr/td/td
+    jQuery(document).ready(function(){
+      $.getJSON('_view/questions_list',function(data){
+        $("#stats").append('<tr><td> Total number of questions:</td><td>' + data.rows[0].value.toString() + '</td></tr>');
+      });
+      $.getJSON('_view/categories',function(data){
+        $("#stats").append('<tr><td> Total number of categories:</td><td>' + data.rows[0].value.toString() + '</td></tr>');
+      });
+    });
+  </script>
   <h1 class="title-page">FAQoogle</h1>
   <a href="records.html">Add Records</a>
   <a href="category.html">Add Category</a>
@@ -20,6 +33,10 @@
   <div class="ui-widget">
       <table id="answers">
       </table>
+  </div>
+  <div class="ui-widget stats-box" id="stats-box">
+    <table id="stats">
+    </table>
   </div>
 </body>
 </html>

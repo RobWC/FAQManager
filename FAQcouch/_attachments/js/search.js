@@ -1,6 +1,7 @@
 jQuery(document).ready(function($){
     var databasename = 'faq';
     function handleSubmit() {
+        $('#stats-box').fadeOut('fast');
         $("#answers").empty();
         var queryValue = $("#query").val();
         var queryToStore = new Object();
@@ -61,6 +62,7 @@ jQuery(document).ready(function($){
     $("button#clear").click(function(){
         $("table#answers").fadeOut('slow', function() {
             $("table#answers").empty();
+            $('#stats-box').fadeIn('slow');
         });
     });
 });

@@ -10,6 +10,7 @@
         $(function(){
             var databasename = 'faq';
             function handleSubmit() {
+                $("#stats-box").fadeOut("fast");
                 $("#answers").empty();
                 var queryValue = $("#query").val();
                 var queryToStore = new Object();
