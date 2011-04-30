@@ -5,67 +5,22 @@ jQuery(document).ready(function($){
   var databaseName = 'faq';
   
   //just incase you need to do something on startup
-  
-   //setup event handlers
-  $("#createButton").evently({
-    click: function() {
-      if ($("#category").val() != '') {
-      
-      	//create error handler
-      	var options = new Object();
-      	options.error = function() {
-      		alert('failed to create category');
-      	};
-      
-        var newItem = new Object();
-        //fix the name
-        newItem.categoryName = $("#category").val();
-        newItem.type = 'category';
-        $.couch.db(databaseName).saveDoc(newItem, options);
-        
-        var data = '{"_id":"_design/' + newItem.categoryName.toLowerCase() + '","views": {"' + newItem.categoryName.toLowerCase() + '": { "map": "function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}';
-        
-        $("#category").val('');
-        //add view here
-        
-        $.couch.db(databaseName).saveDoc(data, options);
-        
-        //say it worked.
-        $("#addSuccess").show("slow").delay(2000);
-        $("#addSuccess").hide("slow");
-      } else {
-        $("#addName").show("slow").delay(2000);
-        $("#addName").hide("slow");
-      };
-      drawCategories();
-      return false;
-    }
-  });
-  
-  function drawCategories() {
-    $.getJSON('_view/categories?reduce=false', function(data){
-        var array = data.rows;
-        $('#categoryList tr[id]').fadeOut("slow").remove();
-		var count = 0;
-        $.each(array, function(i, item){
-			var css;
-			if (FAQ.isEven(i)) {
-				css = 'even';   
-			} else {
-				css = 'odd';
-			};
-            $("#categoryList tbody").append('<tr id="' + array[i].value._id + '" class="' + css + '" data-rev="' + array[i].value._rev + '" data-category="' + array[i].key.toLowerCase() + '"><td>' + array[i].key + '</td><td><a id="delete' + i + '" href="">Delete</a></td></tr>');
-			count++;
-		});
-        
-        $("#categoryList tbody > tr > td a[id^='delete']").evently({
-          click: function() {
-            //alert the user of this action
-            var catName = $('#' + this.id).parent().parent().attr('data-category');
+  //setup dialogs
+  $('#deleteDialog').dialog({
+	  autoOpen: false,
+	  closeOnEscape: true,
+	  resizable: false,
+	  modal: true,
+	  buttons: {
+		  Ok: function(parent) {
+			var catName = $('#' + this.id).parent().parent().attr('data-category');
             var catID = $('#' + this.id).parent().parent().attr('id');
             var catRev = $('#' + this.id).parent().parent().attr('data-rev');
             var dataSend = { "category": catName };
-            
+			
+			alert(catName);
+			console.log(parent);
+            /*
             $.getJSON('/' + databaseName + '/_design/' + catName.toLowerCase() +  '/_view/' + catName.toLowerCase(), function(data){
               //delete the category from all documents
               var array = data.rows;
@@ -104,7 +59,74 @@ jQuery(document).ready(function($){
                         $('#' + catID).fadeOut('slow');
                 }
             });
-            return false;            
+			*/
+		  },
+		  Cancel: function() {
+			 
+		  }
+	  }
+  });
+  
+   //setup event handlers
+  $("#createButton").evently({
+    click: function() {
+      if ($("#category").val() != '') {
+      
+      	//create error handler
+      	var options = new Object();
+      	options.error = function() {
+      		alert('failed to create category');
+      	};
+      
+        var newItem = new Object();
+        //fix the name
+        newItem.categoryName = $("#category").val();
+        newItem.type = 'category';
+        $.couch.db(databaseName).saveDoc(newItem, options);
+        
+		var data = new Object();
+        data._id = '_design/' + newItem.categoryName.toLowerCase();
+		data.views.listmembers = '{"' + newItem.categoryName.toLowerCase() + '": { "map": "function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}';
+      
+		
+        $("#category").val('');
+        //add view here
+        
+		$.couch.db(databaseName).saveDoc(data, options);
+        
+        //say it worked.
+        $("#addSuccess").show("slow").delay(2000);
+        $("#addSuccess").hide("slow");
+      } else {
+        $("#addName").show("slow").delay(2000);
+        $("#addName").hide("slow");
+      };
+      drawCategories();
+      return false;
+    }
+  });
+  
+  function drawCategories() {
+    $.getJSON('_view/categories?reduce=false', function(data){
+        var array = data.rows;
+        $('#categoryList tr[id]').fadeOut("slow").remove();
+		var count = 0;
+        $.each(array, function(i, item){
+			var css;
+			if (FAQ.isEven(i)) {
+				css = 'even';   
+			} else {
+				css = 'odd';
+			};
+            $("#categoryList tbody").append('<tr id="' + array[i].value._id + '" class="' + css + '" data-rev="' + array[i].value._rev + '" data-category="' + array[i].key.toLowerCase() + '"><td>' + array[i].key + '</td><td><a id="delete' + i + '" href="">Delete</a></td></tr>');
+			count++;
+		});
+        
+        $("#categoryList tbody > tr > td a[id^='delete']").evently({
+          click: function() {
+			$('#deleteDialog').dialog("open");
+            //alert the user of this action
+            return false;       
           }
         });
     });
@@ -114,16 +136,3 @@ jQuery(document).ready(function($){
   drawCategories();
   
 });
-function removeDocument(id,rev){
-    jQid = '#'+ id
-    jQuery.ajax({
-        type: "DELETE",
-        url: '/' + databaseName + '/' + id + '?rev=' + rev,
-        success: function(){
-                //pop up little window saying its deleted
-                jQuery(jQid).fadeOut('slow');
-        }
-    });
-    //remove clicked element
-    return false;
-};
