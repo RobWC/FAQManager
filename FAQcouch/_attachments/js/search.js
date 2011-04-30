@@ -17,7 +17,7 @@ jQuery(document).ready(function($){
         $.getJSON('/' + databasename + '/_search?q=' + queryValue, function(data) {
             var rows = new Array();
             rows = data.rows;
-            if (rows == undefined || rows == null || rows == []) {
+            if (rows == undefined || rows == null || rows.length == 0) {
                 $("#answers").append('<tr><td>No Results Found</td></tr>');
             } else {
                 var i;
@@ -31,13 +31,11 @@ jQuery(document).ready(function($){
                             css = 'odd';
                         };
                         count++;
-                        //$('<img>',{ src: 'mypic.gif' }).appendTo('#mylist').wrap('<li>');
                         $('<tr>',{"class": css,"id":data._id}).appendTo('#answers');
                         
-                        $('<td>' + FAQ.textRendererSearch(data.question,queryValue) + '</td>').appendTo('#' + data._id);
+                        FAQ.textRenderer(data.question,queryValue,'<td>').appendTo('#' + data._id);
                         FAQ.textRenderer(data.answer,queryValue,'<td>').appendTo('#' + data._id);
-                        $('<td>' + data.category + '</td>').appendTo('#' + data._id);
-                        //$("#answers").append('<tr id="' + data._id + '" class="' + css + '"><td>' + FAQ.textRenderer(FAQ.textRendererSearch(data.question,queryValue).text()) + '</td><td>' +  FAQ.textRenderer(FAQ.textRendererSearch(data.answer,queryValue).text()) + '</td><td>' + data.category + '</td></tr>');
+                        $("#" + data._id).append($("<td>").text(data.category.toString()));
                     },'json');
                     //documentData = $.parseJSON(result.responseText);
                 }   
@@ -49,19 +47,34 @@ jQuery(document).ready(function($){
     
     $('#query').keypress(function(event) {
         if (event.which == '13') {
-            handleSubmit();
+        $("table#answers").fadeIn('slow', function() {
+                 handleSubmit();
+            });           
         };
     });
     
     $("button#submit").button();
     $("button#submit").click(function(){
-        handleSubmit();
+        $("table#answers").fadeIn('slow', function() {
+            handleSubmit();
+        });           
+    });
+    
+    $('#query').keypress(function(event) {
+        if (event.which == '0') {
+            $("table#answers").fadeOut('slow', function() {
+                $("table#answers").empty();
+                $("#query").val('');
+                $('#stats-box').fadeIn('slow');
+            });
+        };
     });
     
     $("button#clear").button();
     $("button#clear").click(function(){
         $("table#answers").fadeOut('slow', function() {
             $("table#answers").empty();
+            $("#query").val('');
             $('#stats-box').fadeIn('slow');
         });
     });

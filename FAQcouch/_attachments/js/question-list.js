@@ -7,7 +7,7 @@ jQuery(document).ready(function($){
     //setup boxes
     
     //load categories
-    $.get('_list/cats_as_options/categories', function(data) {
+    $.get('_list/cats_as_options/categories?reduce=false', function(data) {
         $("#category").append(data);
     });
     
@@ -43,7 +43,7 @@ jQuery(document).ready(function($){
     $('#dialog').dialog({
         autoOpen: false,
         closeOnEscape: true,
-        minWidth: 500,
+        minWidth: 700,
         resizable: false,
         buttons: {
             "Edit": function() {
@@ -70,7 +70,7 @@ jQuery(document).ready(function($){
                     $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
                     var currentCategories = content.split(',');
                     $("div#dialogCategory").append('<ol id="selectable"/>');
-                    $.getJSON('_view/categories/', function(data){
+                    $.getJSON('_view/categories?reduce=false', function(data){
                         var array = data.rows;
                         $.each(array, function(i, item){
                             var x;
@@ -187,9 +187,9 @@ jQuery(document).ready(function($){
         if (activatingElement) {
             //activated by element
             getData.limit = $('#rowCount').val();
-            /*if (activatingElement != 'category') {
+            if (activatingElement != 'category') {
                 getData.skip = 1;
-            }*/
+            }
         } else {
             //inital get
             getData.limit = $('#rowCount').val();
@@ -243,11 +243,16 @@ jQuery(document).ready(function($){
             for (i in array){
                 var css;
                 if (FAQ.isEven(i)) {
-                    css = 'class="even"';   
+                    css = 'even';
                 } else {
-                    css = 'class="odd"';
+                    css = 'odd';
                 };
-                $("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td id="question">' + FAQ.textRenderer(array[i].value.question) + '<\/td><td id="answer">' + FAQ.textRenderer(array[i].value.answer) + '<\/td><td id="category">' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
+                //$("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td id="question">' + FAQ.textRenderer(array[i].value.question) + '<\/td><td id="answer">' + FAQ.textRenderer(array[i].value.answer) + '<\/td><td id="category">' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
+                $('<tr>', {"class": css, "id": array[i].value._id, "data-rev": array[i].value._rev}).appendTo('#faqTable tbody#main');
+                FAQ.textRenderer(array[i].value.question,'','<td>').attr("id","question").appendTo('#' + array[i].value._id);
+                FAQ.textRenderer(array[i].value.answer,'','<td>').attr("id","answer").appendTo('#' + array[i].value._id);
+                FAQ.textRenderer(array[i].value.category.toString(),'','<td>').attr("id","category").appendTo('#' + array[i].value._id);
+                $('<td class="actions"><a id="detail" href="">Detail/Edit<\/a> <a id="delete" href="">Delete<\/a><\/td>').appendTo('#' + array[i].value._id);
             };
             
 
@@ -416,7 +421,7 @@ jQuery(document).ready(function($){
                 //ignore if gray
             } else {
                //use get content
-                getContent($("#category").val().toLowerCase(),elementId);
+                getContent($("#category").val().toLowerCase().replace("/","%2F"),elementId);
                 return false;
             };
             return false;

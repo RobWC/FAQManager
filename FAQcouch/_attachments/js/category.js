@@ -46,9 +46,17 @@ jQuery(document).ready(function($){
     $.getJSON('_view/categories?reduce=false', function(data){
         var array = data.rows;
         $('#categoryList tr[id]').fadeOut("slow").remove();
+		var count = 0;
         $.each(array, function(i, item){
-            $("#categoryList tbody").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '" data-category="' + array[i].key.toLowerCase() + '"><td>' + array[i].key + '</td><td><a id="delete' + i + '" href="">Delete</a></td></tr>');
-        });
+			var css;
+			if (FAQ.isEven(i)) {
+				css = 'even';   
+			} else {
+				css = 'odd';
+			};
+            $("#categoryList tbody").append('<tr id="' + array[i].value._id + '" class="' + css + '" data-rev="' + array[i].value._rev + '" data-category="' + array[i].key.toLowerCase() + '"><td>' + array[i].key + '</td><td><a id="delete' + i + '" href="">Delete</a></td></tr>');
+			count++;
+		});
         
         $("#categoryList tbody > tr > td a[id^='delete']").evently({
           click: function() {

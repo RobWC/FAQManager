@@ -50,9 +50,21 @@ var FAQ = {
         
         //replace specific patternss
         var patterns = {
-            "\n":"<br>"
+            "\n":"<br>" //respect carrage returns
         };
         
+        /*
+         
+         I need to create a way to do loops for specific elements. Here is what I want to add.
+         
+         Bullets - '#*'
+         numbered list - '
+         highlight
+         bold
+         underline
+         italic
+         
+        */
         function shoe(string, pattern, replace) {
                 var re = new RegExp(pattern,"gi");
                 var searchString = string;
@@ -81,7 +93,6 @@ var FAQ = {
         
         var jQtext = $(wrapElement, {"html": text });
         
-                
         //itterate of the pattern
         for (key in patterns) {
             jQtext.html(shoe(jQtext.html(), key, patterns[key]));
