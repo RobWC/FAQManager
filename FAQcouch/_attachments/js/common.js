@@ -1,4 +1,6 @@
 //file that contains all of the shared fuctions used in the tool
+var databaseName = new String('faq');
+
 var FAQ = {
     //used to delete a document from the grid view
     removeDocument: function(id, rev) {

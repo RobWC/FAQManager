@@ -1,19 +1,17 @@
 //when document is ready do stuff
+jQuery(document).ready(function($) {
 
-jQuery(document).ready(function($){
-    
     var databaseName = 'faq';
-    
+
     //setup boxes
-    
     //load categories
     $.get('_list/cats_as_options/categories?reduce=false', function(data) {
         $("#category").append(data);
     });
-    
+
     //load questions
-    getContent('','');
-    
+    getContent('', '');
+
     //setup dialogs
     $('#save-dialog').dialog({
         autoOpen: false,
@@ -27,7 +25,7 @@ jQuery(document).ready(function($){
             }
         }
     });
-    
+
     $('#save-nchange').dialog({
         autoOpen: false,
         closeOnEscape: true,
@@ -39,7 +37,7 @@ jQuery(document).ready(function($){
             }
         }
     });
-    
+
     $('#dialog').dialog({
         autoOpen: false,
         closeOnEscape: true,
@@ -50,33 +48,33 @@ jQuery(document).ready(function($){
                 //start editing
                 //events for dialogQuestion
                 $("div#dialogQuestion").contents().filter(function() {
-                    $("div#dialogContent").attr('data-changed','true');
+                    $("div#dialogContent").attr('data-changed', 'true');
                     var content = this.textContent;
                     $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
                     return this.textContent
                 }).wrap('<textarea class="editDialog" width="400"/>');
-                
-                 $("div#dialogAnswer").contents().filter(function() {
-                    $("div#dialogContent").attr('data-changed','true');
+
+                $("div#dialogAnswer").contents().filter(function() {
+                    $("div#dialogContent").attr('data-changed', 'true');
                     var content = this.textContent;
                     $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
                     return this.textContent
-                }).wrap('<textarea class="editDialog" width="400"/>'); 
-                
+                }).wrap('<textarea class="editDialog" width="400"/>');
+
                 $("div#dialogCategory").contents().filter(function() {
                     var content = this.textContent;
-                    $("div#dialogContent").attr('data-changed','true');
+                    $("div#dialogContent").attr('data-changed', 'true');
                     $("div#dialogCategory").empty();
                     $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
                     var currentCategories = content.split(',');
                     $("div#dialogCategory").append('<ol id="selectable"/>');
-                    $.getJSON('_view/categories?reduce=false', function(data){
+                    $.getJSON('_view/categories?reduce=false', function(data) {
                         var array = data.rows;
-                        $.each(array, function(i, item){
+                        $.each(array, function(i, item) {
                             var x;
                             var match = new Boolean(false);
                             for (x in currentCategories) {
-                                if (currentCategories[x] ==  array[i].key) {
+                                if (currentCategories[x] == array[i].key) {
                                     $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
                                     match = true;
                                 };
@@ -91,7 +89,13 @@ jQuery(document).ready(function($){
             },
             "Save Changes": function() {
                 //define content
-                var documentUpdate = {question:'',answer:'',category:new Array(),_rev:'',_id:''};
+                var documentUpdate = {
+                    question: '',
+                    answer: '',
+                    category: new Array(),
+                    _rev: '',
+                    _id: ''
+                };
                 //grab question content
                 if ($('#dialogContent').attr('data-changed') == 'true') {
                     if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
@@ -112,21 +116,23 @@ jQuery(document).ready(function($){
                     //var categories
                     if ($('div#dialogCategory ol#selectable') != undefined) {
                         if ($('div#dialogCategory ol li.ui-selected')) {
-                            $('div#dialogCategory ol li.ui-selected').each(function(index){
+                            $('div#dialogCategory ol li.ui-selected').each(function(index) {
                                 documentUpdate.category.push($(this).text());
-                            });    
+                            });
                         } else {
-                                documentUpdate.category.push('None');    
+                            documentUpdate.category.push('None');
                         }
                     } else {
                         documentUpdate.category.push($("div#dialogCategory").text().split(','));
                     };
-                    
+
                     documentUpdate._rev = $('#dialogContent').attr('data-rev');
                     documentUpdate._id = $('#dialogContent').attr('data-id');
                     //send the final updatee
                     var options = new Object();
-                    options.error = function() { alert('unable to save update')};
+                    options.error = function() {
+                        alert('unable to save update')
+                    };
                     $.couch.db(databaseName).saveDoc(documentUpdate, options);
                     console.log(documentUpdate);
                     $('#save-dialog').dialog("open");
@@ -144,7 +150,7 @@ jQuery(document).ready(function($){
                     //fade in update of each
                 } else {
                     $('#save-nchange').dialog("open");
-                };    
+                };
             },
             "Clear": function() {
                 //grab original content
@@ -153,37 +159,36 @@ jQuery(document).ready(function($){
                 var question = $("#hiddenQuestion").attr('data-question');
                 var answer = $("#hiddenAnswer").attr('data-answer');
                 var categories = $("#hiddenCategories").attr('data-categories');
-                
+
                 if (question != null) {
                     $("#dialogQuestion").empty();
                     $("#dialogQuestion").append(question).wrap('<p/>');
-    
+
                 };
-                
+
                 if (answer != null) {
                     $("#dialogAnswer").empty();
                     $("#dialogAnswer").append(answer).wrap('<p/>');
                 };
-                
+
                 if (categories != null) {
                     $("#dialogCategory").empty();
                     $("#dialogCategory").append(categories).wrap('<p/>');
                     //add categories
                 };
-                
+
             },
             "Cancel": function() {
                 $(this).dialog("close");
             }
         }
     });
-    
-    function getContent(category,activatingElement) {
+
+    function getContent(category, activatingElement) {
         //total items to gather
         //get the next set of elements
         var getData = new Object();
         //set the number of items
-        
         if (activatingElement) {
             //activated by element
             getData.limit = $('#rowCount').val();
@@ -194,7 +199,7 @@ jQuery(document).ready(function($){
             //inital get
             getData.limit = $('#rowCount').val();
         };
-       
+
         //setting the default docs
         var firstDoc, lastDoc;
         //setting the default view
@@ -203,13 +208,13 @@ jQuery(document).ready(function($){
         if ($("#faqTable tr[id]").get(0) != null) {
             firstDoc = $("#faqTable tr[id]").get(0).id;
         };
-        if ($("#faqTable tr[id]").get(-1) != null ) {
+        if ($("#faqTable tr[id]").get(-1) != null) {
             lastDoc = $("#faqTable tr[id]").get(-1).id;
         };
-        
+
         //grab the current category
-        view = FAQ.getCatView(databaseName,category,false);
-        
+        view = FAQ.getCatView(databaseName, category, false);
+
         //ordering
         if (activatingElement == 'nextPageLink') {
             getData.descending = 'false';
@@ -223,24 +228,24 @@ jQuery(document).ready(function($){
             //loading new dataset 
         };
 
-        $.getJSON(view , getData, function(data){
+        $.getJSON(view, getData, function(data) {
             //update view with new questions
             $("#faqTable tr[id]").remove();
-            
+
             var array = new Array();
             array = data.rows;
-            
+
             var offset = parseFloat(data.offset);
             var totalRows = parseFloat(data.total_rows);
             var items = parseFloat($('#rowCount').val());
-            
-            if (activatingElement == 'prevPageLink') {   
+
+            if (activatingElement == 'prevPageLink') {
                 //reverse sort
                 array.reverse();
             };
-            
+
             var i;
-            for (i in array){
+            for (i in array) {
                 var css;
                 if (FAQ.isEven(i)) {
                     css = 'even';
@@ -248,37 +253,41 @@ jQuery(document).ready(function($){
                     css = 'odd';
                 };
                 //$("#faqTable tbody#main").append('<tr id="' + array[i].value._id + '" data-rev="' + array[i].value._rev + '"' + css + '><td id="question">' + FAQ.textRenderer(array[i].value.question) + '<\/td><td id="answer">' + FAQ.textRenderer(array[i].value.answer) + '<\/td><td id="category">' + array[i].value.category + '<\/td><td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete' + i.toString() + '" href="">Delete<\/a><\/td><\/tr>');
-                $('<tr>', {"class": css, "id": array[i].value._id, "data-rev": array[i].value._rev}).appendTo('#faqTable tbody#main');
-                FAQ.textRenderer(array[i].value.question,'','<td>').attr("id","question").appendTo('#' + array[i].value._id);
-                FAQ.textRenderer(array[i].value.answer,'','<td>').attr("id","answer").appendTo('#' + array[i].value._id);
-                FAQ.textRenderer(array[i].value.category.toString(),'','<td>').attr("id","category").appendTo('#' + array[i].value._id);
+                $('<tr>', {
+                    "class": css,
+                    "id": array[i].value._id,
+                    "data-rev": array[i].value._rev
+                }).appendTo('#faqTable tbody#main');
+                FAQ.textRenderer(array[i].value.question, '', '<td>').attr("id", "question").appendTo('#' + array[i].value._id);
+                FAQ.textRenderer(array[i].value.answer, '', '<td>').attr("id", "answer").appendTo('#' + array[i].value._id);
+                FAQ.textRenderer(array[i].value.category.toString(), '', '<td>').attr("id", "category").appendTo('#' + array[i].value._id);
                 $('<td class="actions"><a id="detail" href="">Detail/Edit<\/a> <a id="delete" href="">Delete<\/a><\/td>').appendTo('#' + array[i].value._id);
             };
-            
+
 
             $("#faqTable tbody > tr > td a[id^='detail']").evently({
                 click: function() {
                     if ($('#dialog').dialog('isOpen')) {
                         $('#dialog').dialog('close');
-                        
+
                     };
-                    
-                    $('#dialog').empty();     
-                    
+
+                    $('#dialog').empty();
+
                     var rowID = $('#' + this.id).parent().parent().attr('id');
-                    
-                    $.getJSON('/' + databaseName + '/' + rowID, function(data){
-                        
+
+                    $.getJSON('/' + databaseName + '/' + rowID, function(data) {
+
                         if (data._id) {
                             $('#dialog').append('<div id="dialogContent" data-id="' + data._id + '" data-rev="' + data._rev + '"><p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
                         };
-                        
+
                     });
                     $('#dialog').dialog('open');
                     return false;
                 }
             });
-            
+
             //event handler for the click button
             $("#faqTable tbody > tr > td a[id^='delete']").evently({
                 click: function() {
@@ -289,13 +298,13 @@ jQuery(document).ready(function($){
                     return false;
                 }
             });
-            
+
             //handle if the next page link href was clicked
             if (activatingElement == 'nextPageLink') {
                 //next clicked
                 if (offset + items < totalRows) {
                     $('#nextPageLink').removeAttr('href');
-                    $('#nextPageLink').attr('href',' ');
+                    $('#nextPageLink').attr('href', ' ');
                     if ($('#nextPageLink').hasClass('gray') == true) {
                         $('#nextPageLink').removeClass('gray');
                     };
@@ -307,11 +316,11 @@ jQuery(document).ready(function($){
                         $('#nextPageLink').removeAttr('href');
                     };
                 }
-                
+
                 //set previous: Can I go back?
                 if (offset >= 1) {
                     $('#prevPageLink').removeAttr('href');
-                    $('#prevPageLink').attr('href',' ');
+                    $('#prevPageLink').attr('href', ' ');
                     if ($('#prevPageLink').hasClass('gray') == true) {
                         $('#prevPageLink').removeClass('gray');
                     };
@@ -320,14 +329,14 @@ jQuery(document).ready(function($){
                         $('#prevPageLink').addClass('gray');
                     };
                     if ($('#prevPageLink').attr('href') != true) {
-                        $('#prevPageLink').removeAttr('href');    
-                    };    
+                        $('#prevPageLink').removeAttr('href');
+                    };
                 };
-            //handler if the prev page link button was clicked
+                //handler if the prev page link button was clicked
             } else if (activatingElement == 'prevPageLink') {
-                 if (offset + items < totalRows) {
+                if (offset + items < totalRows) {
                     $('#prevPageLink').removeAttr('href');
-                    $('#prevPageLink').attr('href',' ');
+                    $('#prevPageLink').attr('href', ' ');
                     if ($('#prevPageLink').hasClass('gray') == true) {
                         $('#prevPageLink').removeClass('gray');
                     };
@@ -336,14 +345,14 @@ jQuery(document).ready(function($){
                         $('#prevPageLink').addClass('gray');
                     };
                     if ($('#prevPageLink').attr('href') != true) {
-                        $('#prevPageLink').removeAttr('href');    
-                    };    
+                        $('#prevPageLink').removeAttr('href');
+                    };
                 }
-                
+
                 //set previous: Can I go back?
                 if (offset >= 1) {
                     $('#nextPageLink').removeAttr('href');
-                    $('#nextPageLink').attr('href',' ');
+                    $('#nextPageLink').attr('href', ' ');
                     if ($('#nextPageLink').hasClass('gray') == true) {
                         $('#nextPageLink').removeClass('gray');
                     };
@@ -353,13 +362,13 @@ jQuery(document).ready(function($){
                     };
                     if ($('#nextPageLink').attr('href') != true) {
                         $('#nextPageLink').removeAttr('href');
-                    }; 
+                    };
                 };
             } else {
                 //next clicked
                 if (offset + items < totalRows) {
                     $('#nextPageLink').removeAttr('href');
-                    $('#nextPageLink').attr('href',' ');
+                    $('#nextPageLink').attr('href', ' ');
                     if ($('#nextPageLink').hasClass('gray') == true) {
                         $('#nextPageLink').removeClass('gray');
                     };
@@ -371,11 +380,11 @@ jQuery(document).ready(function($){
                         $('#nextPageLink').removeAttr('href');
                     };
                 }
-                
+
                 //set previous: Can I go back?
                 if (offset >= items) {
                     $('#prevPageLink').removeAttr('href');
-                    $('#prevPageLink').attr('href',' ');
+                    $('#prevPageLink').attr('href', ' ');
                     if ($('#prevPageLink').hasClass('gray') == true) {
                         $('#prevPageLink').removeClass('gray');
                     };
@@ -384,17 +393,17 @@ jQuery(document).ready(function($){
                         $('#prevPageLink').addClass('gray');
                     };
                     if ($('#prevPageLink').attr('href') != true) {
-                        $('#prevPageLink').removeAttr('href');    
-                    };    
-                };    
+                        $('#prevPageLink').removeAttr('href');
+                    };
+                };
             }
-            
+
             //prevNextShading(nextPageLinkAccess,prevPageLinkAccess,false);
         });
-        
+
         //update total items
         $('#totalItems').empty();
-        /*
+/*
         //get current category
         //var currentCat = new String();
         var reduceView = new String();
@@ -420,25 +429,25 @@ jQuery(document).ready(function($){
             if ($('#' + elementId).hasClass('gray')) {
                 //ignore if gray
             } else {
-               //use get content
-                getContent($("#category").val().toLowerCase().replace("/","%2F"),elementId);
+                //use get content
+                getContent($("#category").val().toLowerCase().replace("/", "%2F"), elementId);
                 return false;
             };
             return false;
         },
-        change: function(){
-            
+        change: function() {
+
             var elementId = this.id;
-            
+
             if (elementId == "category" && $("#category").val() != '') {
-                getContent($("#category").val().toLowerCase(),elementId);
+                getContent($("#category").val().toLowerCase(), elementId);
                 return false;
             } else {
-                getContent('',elementId);
+                getContent('', elementId);
                 return false;
             };
-            return false; 
+            return false;
         }
     });
-    
+
 });
