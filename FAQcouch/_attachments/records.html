@@ -16,9 +16,7 @@
     <form id="tester">
       Question: <textarea id="question"rows="10" cols="80" name="question"></textarea><br/>
       Answer:   <textarea id="answer" rows="10" cols="80" name="answer"></textarea><br/>
-      Category: <select id="category" name="category"><option value=""></option></select>
-      <input id="addCategoryButt" type="button" value="+ Category" name="categoryButton"/><br>
-      + Category: <div id="addCategoryDiv"></div>
+      Category: <div id="categories"></div>
       <input id="createButton" type="button" value="Add Record" name="submitButton"/>
     </form>
     <p id="nodata" class="nodata">You must enter a question, answer, and category.</p>
@@ -32,13 +30,17 @@
       
       var databaseName = 'faq';
       
-      $.getJSON('_view/categories/', function(data){
-        var array = data.rows;
-        $.each(array, function(i, item){
-          $("#category").append('<option value="' + array[i].key + '">'+ array[i].key + '</option>');
-        });
+      ///add category information
+      $("div#categories").empty();
+      $("div#categories").append('<ol id="selectable"/>');
+      $.getJSON('_view/categories?reduce=false', function(data) {
+          var array = data.rows;
+          $.each(array, function(i, item) {
+              $("div#categories ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+          });
       });
-    
+      $('#selectable').selectable();
+
       $("#createButton").evently({
       click: function(){
           if ($("#question").val() != '' && $("#answer").val() != '' && $("#category").val() != '') {
@@ -47,15 +49,15 @@
             newItem.question = $("#question").val();
             newItem.answer = $("#answer").val();
             //pull all categories
-            $.each($('select'), function(i,item){
-              newItem.category.push($(item).val());
+            $.each($('#categories ol li.ui-selected'), function(i,item){
+              newItem.category.push($(item).text());
             });
-            //newItem.category = $("#category").val();
+            console.log(newItem);
             $.couch.db(databaseName).saveDoc(newItem);
-            $("#addCategoryDiv").empty().fadeOut("slow");
             $("#question").val('');
             $("#answer").val('');
-            $("#category").val('');
+            //clear categories
+            $('#categories ol li.ui-selected').removeClass('ui-selected');
             $("#success").show("slow").delay(2000);
             $("#success").hide("slow");
           } else {

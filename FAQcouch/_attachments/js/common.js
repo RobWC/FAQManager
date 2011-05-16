@@ -39,7 +39,7 @@ var FAQ = {
         if (category == 'none') {
             view = '/' + databaseName + '/_design/FAQcouch/_view/none_category?reduce=false';
         } else if (category != '') {
-            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/' + category.toLowerCase();
+            view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/listmembers';
         } else {
             //default already set
             view = '_view/questions_list' + reduceString;

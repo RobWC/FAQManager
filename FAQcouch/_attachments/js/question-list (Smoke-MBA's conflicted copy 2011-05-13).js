@@ -54,40 +54,39 @@ jQuery(document).ready(function($) {
                     return this.textContent
                 }).wrap('<textarea class="editDialog" width="400"/>');
 
-                //$("div#dialogAnswer").html($("div#dialogAnswer").text().replace("<br>","\n"));
-                
                 $("div#dialogAnswer").contents().filter(function() {
                     $("div#dialogContent").attr('data-changed', 'true');
                     var content = this.textContent;
-                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />');
-                    return this.textContent;
+                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />')
+                    return this.textContent
                 }).wrap('<textarea class="editDialog" width="400"/>');
 
-                var content = $("div#dialogCategory").text();
-                $("div#dialogContent").attr('data-changed', 'true');
-                $("div#dialogCategory").empty();
-                $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
-                var currentCategories = content.split(',');
-                $("div#dialogCategory").append('<ol id="selectable"/>');
-                $.getJSON('_view/categories?reduce=false', function(data) {
-                    var array = data.rows;
-                    $.each(array, function(i, item) {
-                        var x;
-                        var match = new Boolean(false);
-                        for (x in currentCategories) {
-                            if (currentCategories[x] == array[i].key) {
-                                $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
-                                match = true;
-                            } else {
-                                false;
+                $("div#dialogCategory").contents().filter(function() {
+                    var content = this.textContent;
+                    $("div#dialogContent").attr('data-changed', 'true');
+                    $("div#dialogCategory").empty();
+                    $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
+                    var currentCategories = new Array();
+                    currentCategories = content.split(',');
+                    $("div#dialogCategory").append('<ol id="selectable"/>');
+                    $.getJSON('_view/categories?reduce=false', function(data) {
+                        var array = data.rows;
+                        $.each(array, function(i, item) {
+                            var x;
+                            var match = new Boolean(false);
+                            for (x in currentCategories) {
+                                if (currentCategories[x] == array[i].key) {
+                                    $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
+                                    match = true;
+                                };
                             };
-                        };
-                        if (match == false) {
-                            $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
-                        };
+                            if (match === false) {
+                                $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                            };
+                        });
                     });
+                    $('#selectable').selectable();
                 });
-                $('#selectable').selectable();
             },
             "Save Changes": function() {
                 //define content
@@ -133,7 +132,7 @@ jQuery(document).ready(function($) {
                     //send the final updatee
                     var options = new Object();
                     options.error = function() {
-                        alert('unable to save update');
+                        alert('unable to save update')
                     };
                     $.couch.db(databaseName).saveDoc(documentUpdate, options);
                     console.log(documentUpdate);
@@ -263,7 +262,7 @@ jQuery(document).ready(function($) {
                 FAQ.textRenderer(array[i].value.question, '', '<td>').attr("id", "question").appendTo('#' + array[i].value._id);
                 FAQ.textRenderer(array[i].value.answer, '', '<td>').attr("id", "answer").appendTo('#' + array[i].value._id);
                 FAQ.textRenderer(array[i].value.category.toString(), '', '<td>').attr("id", "category").appendTo('#' + array[i].value._id);
-                $('<td class="actions"><a id="detail' + i + '" href="">Detail/Edit<\/a> <a id="delete' + i + '" href="">Delete<\/a><\/td>').appendTo('#' + array[i].value._id);
+                $('<td class="actions"><a id="detail' + i.toString() + '" href="">Detail/Edit<\/a> <a id="delete" href="">Delete<\/a><\/td>').appendTo('#' + array[i].value._id);
             };
 
 

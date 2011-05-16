@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
 		var catID = $('#deleteDialog #catData').attr("data-id");
 		var catRev = $('#deleteDialog #catData').attr("data-rev");
 
-		$.getJSON('/' + databaseName + '/_design/' + catName.toLowerCase() +  '/_view/' + catName.toLowerCase(), function(data){
+		$.getJSON('/' + databaseName + '/_design/' + catName.toLowerCase() +  '/_view/listmembers', function(data){
 		  //delete the category from all documents
 		  var array = data.rows;
 		  $.each(array, function(i,item){
@@ -79,8 +79,12 @@ jQuery(document).ready(function($) {
 
 		var data = new Object();
 		data._id = '_design/' + newItem.categoryName.toLowerCase();
-		data.views.listmembers = '{"' + newItem.categoryName.toLowerCase() + '": { "map": "function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}';
-
+		data.views = {
+			listmembers : {
+				map:'"function(doc) {if (doc.category == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc);} else if (doc.category.length != null) {var i;for (i in doc.category) {if (doc.category[i] == \\"' + newItem.categoryName + '\\") {emit(doc._id, doc)}}}}"}}}'
+			
+			}
+		};
 
 		$("#category").val('');
 		//add view here
