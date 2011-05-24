@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
     });
 
     //load questions
-    getContent('', '');
+    getContent('','');
 
     //setup dialogs
     $('#save-dialog').dialog({
@@ -46,48 +46,63 @@ jQuery(document).ready(function($) {
         buttons: {
             "Edit": function() {
                 //start editing
-                //events for dialogQuestion
-                $("div#dialogQuestion").contents().filter(function() {
+                var documentID = $('div#dialogContent').attr('data-id');
+                //get the original content
+                
+                $.getJSON('/' + databaseName + '/' + documentID, function(data) {
+                    var document = new Object();
+                    document.category = new Array();
+                    document.question = new String();
+                    document.answer = new String();
+                    document.category = data.category;
+                    document.question = data.question;
+                    document.answer = data.answer;
+                    
+                     //events for dialogQuestion
                     $("div#dialogContent").attr('data-changed', 'true');
-                    var content = this.textContent;
-                    $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + content + '" />')
-                    return this.textContent
-                }).wrap('<textarea class="editDialog" width="400"/>');
+                    
+                    //fixed
+                    $("div#dialogQuestion").empty();
+                    $("div#dialogQuestion").append('<div id="hiddenQuestion" data-question="' + document.question.toString() + '" />');
+                    $("div#dialogQuestion").append('<p id="questionText">' + document.question.toString() + '</p>');
+                    $("div#dialogQuestion p#questionText").wrapInner('<textarea class="editDialog" width="400"/>');
+                    
+                    $("div#dialogAnswer").empty();
+                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + document.answer.toString() + '" />');
+                    $("div#dialogAnswer").append('<p id="answerText">' + document.answer.toString() + '</p>');
+                    $("div#dialogAnswer p#answerText").wrapInner('<textarea class="editDialog" width="400"/>');
+                    
+                    var content = $("div#dialogCategory").text();
+                    $("div#dialogContent").attr('data-changed', 'true');
+                    $("div#dialogCategory").empty();
+                    $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
+                    var currentCategories = content.split(',');
+                    $("div#dialogCategory").append('<ol id="selectable"/>');
+                    $.getJSON('_view/categories?reduce=false', function(data) {
+                        var array = data.rows;
+                        $.each(array, function(i, item) {
+                            var x;
+                            var match = new Boolean(false);
+                            for (x in currentCategories) {
+                                if (currentCategories[x] == array[i].key) {
+                                    $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
+                                    match = true;
+                                } else {
+                                    false;
+                                };
+                            };
+                            if (match == false) {
+                                $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
+                            };
+                        });
+                    });
+                    $('#selectable').selectable();
+
+                
+                });
 
                 //$("div#dialogAnswer").html($("div#dialogAnswer").text().replace("<br>","\n"));
-                
-                $("div#dialogAnswer").contents().filter(function() {
-                    $("div#dialogContent").attr('data-changed', 'true');
-                    var content = this.textContent;
-                    $("div#dialogAnswer").append('<div id="hiddenAnswer" data-answer="' + content + '" />');
-                    return this.textContent;
-                }).wrap('<textarea class="editDialog" width="400"/>');
-
-                var content = $("div#dialogCategory").text();
-                $("div#dialogContent").attr('data-changed', 'true');
-                $("div#dialogCategory").empty();
-                $("div#dialogCategory").append('<div id="hiddenCategories" data-categories="' + content + '" />');
-                var currentCategories = content.split(',');
-                $("div#dialogCategory").append('<ol id="selectable"/>');
-                $.getJSON('_view/categories?reduce=false', function(data) {
-                    var array = data.rows;
-                    $.each(array, function(i, item) {
-                        var x;
-                        var match = new Boolean(false);
-                        for (x in currentCategories) {
-                            if (currentCategories[x] == array[i].key) {
-                                $("div#dialogCategory ol").append('<li class="ui-state-default ui-selected">' + array[i].key + '</li>');
-                                match = true;
-                            } else {
-                                false;
-                            };
-                        };
-                        if (match == false) {
-                            $("div#dialogCategory ol").append('<li class="ui-state-default">' + array[i].key + '</li>');
-                        };
-                    });
-                });
-                $('#selectable').selectable();
+                //we need to pull the source text for this.
             },
             "Save Changes": function() {
                 //define content
@@ -191,16 +206,13 @@ jQuery(document).ready(function($) {
         //get the next set of elements
         var getData = new Object();
         //set the number of items
-        if (activatingElement) {
+        if (activatingElement == 'prevPageLink' || activatingElement == 'nextPageLink') {
             //activated by element
-            getData.limit = $('#rowCount').val();
-            if (activatingElement != 'category') {
-                getData.skip = 1;
-            }
+            getData.skip = 1;
         } else {
             //inital get
-            getData.limit = $('#rowCount').val();
         };
+        getData.limit = $('#rowCount').val();
 
         //setting the default docs
         var firstDoc, lastDoc;
@@ -281,6 +293,7 @@ jQuery(document).ready(function($) {
                     $.getJSON('/' + databaseName + '/' + rowID, function(data) {
 
                         if (data._id) {
+                            ///fix this to correctly render the text
                             $('#dialog').append('<div id="dialogContent" data-id="' + data._id + '" data-rev="' + data._rev + '"><p><b>Question: </b><div id="dialogQuestion">' + data.question + '</div></p><p><b>Answer: </b><div id="dialogAnswer">' + data.answer + '</div></p><p><b>Category: </b><div id="dialogCategory">' + data.category + '</div></p>');
                         };
 
@@ -425,31 +438,33 @@ jQuery(document).ready(function($) {
     };
 
     //respond to combo box change
-    $("#category, #rowCount, div#nextPrev a").evently({
+    $("div#nextPrev a").evently({
         click: function() {
             var elementId = this.id;
             if ($('#' + elementId).hasClass('gray')) {
                 //ignore if gray
             } else {
                 //use get content
-                getContent($("#category").val().toLowerCase().replace("/", "%2F"), elementId);
+                getContent($("#category").val().toLowerCase(), elementId);
                 return false;
             };
             return false;
-        },
+        }
+    });
+    
+    $("#category, #rowCount").evently({
         change: function() {
-
             var elementId = this.id;
 
             if (elementId == "category" && $("#category").val() != '') {
                 getContent($("#category").val().toLowerCase(), elementId);
                 return false;
             } else {
-                getContent('', elementId);
+                getContent($("#category").val().toLowerCase(), elementId);
                 return false;
             };
             return false;
         }
-    });
+     });
 
 });

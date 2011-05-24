@@ -5,6 +5,8 @@
     },
     "cloudant": {
       "db" : "https://junosrob:HappY123CloudinG123@junosrob.cloudant.com/faq"
+    },"ninja": {
+      "db" : "https://admin:HappY123CloudinG123@www.ninjafaq.com/faq"
     }
   }
 }

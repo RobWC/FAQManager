@@ -3,6 +3,16 @@ var databaseName = new String('faq');
 
 var FAQ = {
     //used to delete a document from the grid view
+    newEmptyDocument: function() {
+        var document = {
+            question: '',
+            answer: '',
+            category: new Array(),
+            _rev: '',
+            _id: ''
+        };
+        return document;
+    },
     removeDocument: function(id, rev) {
         jQid = '#' + id
         jQuery.ajax({
@@ -35,9 +45,13 @@ var FAQ = {
         } else if (reduce == false) {
             reduceString = '?reduce=false';
         }
+
+        category = category.replace("\/", "%2F");
         
         if (category == 'none') {
             view = '/' + databaseName + '/_design/FAQcouch/_view/none_category?reduce=false';
+        } else if (category == 'Show All') {
+            view = '_view/questions_list' + reduceString;
         } else if (category != '') {
             view = '/' + databaseName + '/_design/' + category.toLowerCase() + '/_view/listmembers';
         } else {
@@ -52,7 +66,9 @@ var FAQ = {
         
         //replace specific patternss
         var patterns = {
-            "\n":"<br>" //respect carrage returns
+            "<":"&lt;",
+            ">":"&gt;",
+            "\n":"<br>"//respect carrage returns
         };
         
         /*
