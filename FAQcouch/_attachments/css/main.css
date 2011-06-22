@@ -114,3 +114,41 @@ h1.title-page {
 .user-links {
     float: right;
 }
+article.record {
+    width: 500px;
+    height: 200px;
+    margin: 5px;
+    background-color: #222222;
+    font-size: 14px;
+    color: white;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%,#343434), color-stop(80%, #343434), color-stop(100%, #313131));
+    background-image: linear-gradient(top, #343434 0%, #300000 80%, #233333 100%);
+}
+article.record #question {
+    height: 40px;
+}
+article.record #answer {
+    height: 120px;
+}
+article.record footer {
+    min-height: 40px;
+    bottom: 0;
+    width: 100%;
+    position: relative;
+}
+article.record ul {
+    list-style-type: none;
+    right: 2px;
+    left: inherit;
+}
+article.record ul li {
+    display: inline;
+}
+section#records div#scrollie {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    top: 37px;
+    bottom: 0;
+    width: 100%;
+    word-wrap: break-word;
+}

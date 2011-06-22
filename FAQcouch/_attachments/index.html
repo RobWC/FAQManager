@@ -19,8 +19,14 @@
       });
     });
   </script>
-
   
+  <div id="login" title="Login">
+    <form id="Login">
+      Username: <textarea id="username"></textarea>
+      Password: <textarea id="password"></textarea>
+    </form>
+  </div>
+
   <div id="dialog" title="Add Record">
     <div id="dialogContent">
       <form id="newRecordForm">
@@ -33,29 +39,35 @@
         <p>Document successfully saved</p>
     </div>
   </div>
-  
-  <div class="management-links">
-    <a id="addRecord" href="">Add Records</a>
-    <a href="category.html">Add Category</a>
-    <a href="list.html">FAQ by Category</a>
-  </div>
-  
-  <h1 class="ui-widget title-page">NinjaFAQ</h1>
-  <div class="ui-widget search-entry">
-      <label>Search: </label>
-      <input id="query" width="400">
-      <button id="submit">Submit</button>
-      <button id="clear">Clear</button>
-  </div>
-  <br><br>
-  <div class="ui-widget">
-      <table id="answers">
+    <section>
+    <div class="management-links">
+      <a id="addRecord" href="">Add Records</a>
+      <a href="category.html">Add Category</a>
+      <a href="list.html">FAQ by Category</a>
+    </div>
+    
+    <h1 class="ui-widget title-page">NinjaFAQ</h1>
+    <div class="ui-widget search-entry">
+        <label>Search: </label>
+        <input id="query" width="400">
+        <button id="submit">Submit</button>
+        <button id="clear">Clear</button>
+    </div>
+    <br><br>
+    <div class="ui-widget">
+        <table id="answers">
+        </table>
+    </div>
+    <div class="ui-widget stats-box" id="stats-box">
+      <table id="stats">
       </table>
-  </div>
-  <div class="ui-widget stats-box" id="stats-box">
-    <table id="stats">
-    </table>
-  </div>
+    </div>
+  </section>
+  <section id="records">
+    <h1></h1>
+    <div id="scrollie" >
+    </div>
+  </section>
   <footer>
   </footer>
 </body>

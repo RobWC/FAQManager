@@ -1,6 +1,84 @@
 //file that contains all of the shared fuctions used in the tool
 var databaseName = new String('faq');
 
+function Record(_id) {
+    this.question = "";
+    this.answer = "";
+    this._rev = "";
+    this._id = "";
+    this.category = new Array();
+    //check if ID was submitted
+    //if one was then use get data
+    //if one wasn't used then set everything to empty
+    if (_id != '' || _id != null || _id != undefined) {
+        var returned = $.ajax({url:'/' + databaseName + '/' + _id,type:"GET",async:false}).responseText;
+        //set data
+        var data = $.parseJSON(returned);
+        this.answer = data.answer;
+        this.category = data.category;
+        this._rev = data._rev;
+        this.question = data.question;
+        this._id = data._id;
+    };
+};
+
+Record.prototype = {
+    constructor: Record,
+    refreshData: function(id){
+        //used to set all of the properties by giving the object the ID
+        var returned = $.ajax({url:'/' + databaseName + '/' + id,type:"GET",async:false}).responseText;
+        //set data
+        var data = $.parseJSON(returned);
+        this.answer = data.answer;
+        this.category = data.category;
+        this._rev = data._rev;
+        this.question = data.question;
+        this._id = data._id;
+        return 0;
+    },
+    toArticle: function() {
+        //take the document and return it as an HTML element as an article
+        var article  = $('<article>',{"id":this._id,"class":"record","data-rev":this._rev})
+                        .append($('<div id="question"/>').text(this.question))
+                        .append($('<div id="answer"/>').text(this.answer))
+                        .append($('<div id="category"/>').text(this.category))
+                        .append(
+                            $('<footer/>').append(
+                                $('<nav/>').append(
+                                    $('<ul/>')
+                                    .append($('<li id="edit"/>')
+                                        .append($('<a id="edit_action" href=""/>')
+                                                .append('<img src="/img/edit.png"/>')
+                                            )
+                                        )
+                                    .append($('<li id="detail"/>')
+                                        .append($('<a id="detail_action" href=""/>')
+                                                .append('<img src="/img/detail.png"/>')
+                                            )
+                                        )
+                                    .append($('<li id="delete"/>')
+                                        .append($('<a id="delete_action" href=""/>')
+                                                .append('<img src="/img/del.png"/>')
+                                            )
+                                        )
+                                    )
+                                )
+                            );
+        return article;
+    },
+    toObject: function() {
+        //returns object containing all of the data at the root element
+        this.data = {
+            answer: this.answer,
+            question: this.question,
+            category: this.category,
+            _rev: this._rev,
+            _id: this._id
+        };
+        return this.data;
+    }
+};
+
 var FAQ = {
     //used to delete a document from the grid view
     newEmptyDocument: function() {
