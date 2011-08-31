@@ -1,7 +1,7 @@
 //when document is ready do stuff
 jQuery(document).ready(function($) {
 
-    var databaseName = 'faqman';
+    var databaseName = 'faq';
 
     //setup boxes
     //load categories

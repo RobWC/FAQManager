@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FAQ List</title>
+    <script src="vendor/couchapp/loader.js" type="text/javascript"></script>
+    <script src="js/question-list.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <a href="index.html">Home</a>
+    <div id="dialog" title="Question Details">
+        <div id="save-dialog" title="Save Status">
+            <p>Document successfully saved</p>
+        </div>
+        <div id="save-nchange" title="Save Error">
+            <p>No changes made, no need to save!</p>
+        </div>
+    </div>
+
+    <h1 id="title" class="title">FAQ List</h1>
+    
+    <div class="titleCat">
+        <b>Select Single Category: </b><select id="category" name="category">
+            <option value="">
+                Show All
+            </option>
+            <option value="none">None</option>
+        </select>
+        <div id="totalItems"></div>
+    </div>
+
+    <table id="faqTable">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="main">
+        </tbody>
+        <tbody class="footer">
+            <tr>
+                <td colspan="4">
+                    <div id="nextPrev"><a id="prevPageLink" href="" name="prevPageLink">&lt;- Prev</a> <select id="rowCount"><option>5</option><option>10</option><option>20</option></select> <a id="nextPageLink" href="" name="nextPageLink">Next -&gt;</a></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

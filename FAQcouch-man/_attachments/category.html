@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FAQ Manager</title>
+    <style type="text/css">
+    <!--
+    p.nodata {
+      display: none;
+    }
+    -->
+    </style>
+    <script src="vendor/couchapp/loader.js"></script>
+    <script src="js/category.js"></script>
+  </head>
+  <body>
+    <div id="deleteDialog" title="Are you sure you want to delete?">
+      <p>Deleting the category will remove it from the database and from all of the documents. This can't be undone so don't do it just for fun!</p>
+    </div>
+    <a href="index.html">Home</a>
+    <h1>Add Category</h1>
+    <form id="tester">
+      Category Name: <input id="category" type="text" name="category"/><br/>
+      <input id="createButton" type="button" value="Add Category" name="submitButton"/>
+    </form>
+    <p id="addName" class="nodata">You must enter a category name.</p>
+    <p id="addSuccess" class="nodata">Category successfully created!</p>
+    <h1>Existing Categories</h1>
+    <table id="categoryList" border="1">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Action</th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </body>
+</html>

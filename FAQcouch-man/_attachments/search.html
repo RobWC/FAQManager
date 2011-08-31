@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search Test</title>
+        <script src="vendor/couchapp/loader.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+        $(function(){
+                var databasename = 'faq';
+            function handleSubmit() {
+                $("#answers").empty();
+                var queryValue = $("#query").val();
+                var queryToStore = new Object();
+                queryToStore.type = 'query';
+                queryToStore.query = queryValue;
+                
+                var options = new Object();
+                options.error = function() { alert('Could not save document!')};
+                
+                $.couch.db('queries-store').saveDoc(queryToStore, options);
+                //save search query in the queries dd
+                
+                $.getJSON('http://localhost:5984/' + databasename + '_search?q=' + queryValue, function(data) {
+                var rows;
+                rows = data.rows;
+                var i;
+                if (rows == undefined || rows == null) {
+                    $("#answers").append('<tr><td>No Results Found</td></tr>');
+                } else {
+                    for (i in rows) {
+                        $.get('http://localhost:5984/faq/' + rows[i].id, function(data){
+                            var result;
+                            result = JSON.parse(data);
+                            $("#answers").append('<tr><td>' + result.question + '</td><td>' + result.answer + '</td></tr>');
+                        });
+                    }   
+                }
+               });  
+            };
+            
+            $('#query').keypress(function(event) {
+                handleSubmit();  
+            });
+            
+            $("button#submit").button();
+            $("button#submit").click(function(){
+                handleSubmit();   
+            });
+            
+
+        });
+        </script>
+        <div class="ui-widget">
+            <label>Search: </label>
+            <input id="query">
+            <button id="submit">Submit</button>
+        </div>
+        <div class="ui-widget">
+            <table id="answers">
+            </table>
+        </div>
+    </body>
+</html>

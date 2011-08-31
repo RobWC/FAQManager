@@ -1,0 +1,9 @@
+{
+  "env": {
+    "default": {
+      "db" : "http://localhost:5984/faq"
+    },"ninja-man": {
+      "db" : "https://admin:HappY123CloudinG123@www.ninjafaq.com/faqman"
+    }
+  }
+}
