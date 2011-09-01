@@ -101,7 +101,12 @@ Record.prototype = {
     toAside: function(){
         //create a new aside object and make it float out of the panel
        var aside = $('<aside/>',{id:"detail-panel",class:"aside-panel"})
-                        .append($('<div/>',{id:"div-aside-panel",text:this.question, class:"starting-aside"}));
+                        .append($('<div/>',{id:"div-aside-panel", class:"starting-aside"})
+                        		.append($('<div/>',{id:'aside-question',text:'Q: ' + this.question}).addClass('aside-question'))
+                        		.append($('<div/>',{id:'aside-answer'})
+                        				.append(FAQ.textRenderer('A: ' + this.answer, false, '<div/>').addClass('aside-answer'))
+                        		)
+                        );
         
         return aside;
     },

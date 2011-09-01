@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="ui/i18n/|ui/minified/|external/|ui/" kind="src" path="_attachments/development-bundle"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/external"/>
+	<classpathentry excluding="i18n/|minified/" kind="src" path="_attachments/development-bundle/ui"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/ui/i18n"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/ui/minified"/>
+	<classpathentry kind="src" path="_attachments/js"/>
+	<classpathentry kind="src" path="evently/items/_changes"/>
+	<classpathentry kind="src" path="evently/profile/profileReady/selectors/form"/>
+	<classpathentry kind="src" path="lists"/>
+	<classpathentry excluding="vendor/couchapp/evently/account/loginForm/|vendor/couchapp/evently/profile/profileReady/|vendor/couchapp/evently/profile/noProfile/|vendor/couchapp/lib/|vendor/couchapp/evently/account/signupForm/selectors/form/|vendor/couchapp/_attachments/|vendor/couchapp/evently/profile/loggedOut/|vendor/couchapp/evently/account/loggedIn/|vendor/couchapp/evently/account/signupForm/|vendor/couchapp/evently/account/loginForm/selectors/form/|vendor/couchapp/evently/profile/noProfile/selectors/form/|vendor/couchapp/evently/account/|vendor/couchapp/evently/profile/" kind="src" path="updates"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/_attachments"/>
+	<classpathentry excluding="loginForm/|signupForm/selectors/form/|loggedIn/|signupForm/|loginForm/selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/loggedIn"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account/loginForm"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/loginForm/selectors/form"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account/signupForm"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/signupForm/selectors/form"/>
+	<classpathentry excluding="profileReady/|noProfile/|loggedOut/|noProfile/selectors/form/" kind="src" path="updates/vendor/couchapp/evently/profile"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/loggedOut"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/profile/noProfile"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/noProfile/selectors/form"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/profileReady"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/lib"/>
+	<classpathentry kind="src" path="vendor/couchapp/_attachments"/>
+	<classpathentry excluding="signupForm/selectors/form/|loginForm/selectors/form/|loginForm/|signupForm/|loggedIn/" kind="src" path="vendor/couchapp/evently/account"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/loggedIn"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/account/loginForm"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/loginForm/selectors/form"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/account/signupForm"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/signupForm/selectors/form"/>
+	<classpathentry excluding="noProfile/selectors/form/|loggedOut/|noProfile/|profileReady/" kind="src" path="vendor/couchapp/evently/profile"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/loggedOut"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/profile/noProfile"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/noProfile/selectors/form"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/profileReady"/>
+	<classpathentry kind="src" path="vendor/couchapp/lib"/>
+	<classpathentry kind="src" path="views/categories"/>
+	<classpathentry kind="src" path="views/none_category"/>
+	<classpathentry kind="src" path="views/questions"/>
+	<classpathentry kind="src" path="views/questions_list"/>
+	<classpathentry kind="src" path="views/recent-items"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
