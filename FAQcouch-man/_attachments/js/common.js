@@ -3,7 +3,7 @@ var databaseName = new String('faqman');
 var dataName = new String('faq');
 
 function Record(_id) {
-    this.question = "";
+	this.question = "";
     this.answer = "";
     this._rev = "";
     if (_id != null || _id != undefined) {
@@ -12,6 +12,11 @@ function Record(_id) {
         this._id = "";
     };
     this.category = new Array();
+    //new fields
+    this.creationDate = "";
+    this.lastUpdateDate = "";
+    this.creatorUser = "";
+    this.lastUpdateUser = "";
     //check if ID was submitted
     //if one was then use get data
     //if one wasn't used then set everything to empty
@@ -24,6 +29,11 @@ function Record(_id) {
         this._rev = data._rev;
         this.question = data.question;
         this._id = data._id;
+	    //new fields
+	    this.creationDate = "";
+	    this.lastUpdateDate = "";
+	    this.creatorUser = "";
+	    this.lastUpdateUser = "";
     };
 };
 
@@ -32,7 +42,7 @@ Record.prototype = {
     refreshData: function(id){
         //used to set all of the properties by giving the object the ID
         if (id != undefined) {
-            var returned = $.ajax({url:'/' + databaseName + '/' + id,type:"GET",async:false}).responseText;
+            var returned = $.ajax({url:'/' + databaseName + '/' + id,type:"GET",async:true}).responseText;
         //set data
             var data = $.parseJSON(returned);
             this.answer = data.answer;

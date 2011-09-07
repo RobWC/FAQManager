@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="ui/|ui/i18n/|ui/minified/|external/" kind="src" path="_attachments/development-bundle"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/external"/>
+	<classpathentry excluding="i18n/|minified/" kind="src" path="_attachments/development-bundle/ui"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/ui/i18n"/>
+	<classpathentry kind="src" path="_attachments/development-bundle/ui/minified"/>
+	<classpathentry excluding="src/chart/theme/|src/core/test/unit/spec/lang/|pkgs/|core/test/unit/spec/version/|core/test/unit/spec/env/|core/test/unit/spec/|src/button/|src/core/test/unit/spec/|src/menu/|src/view/|src/toolbar/|src/util/|src/core/test/unit/spec/misc/|src/core/test/unit/spec/version/|src/core/src/misc/|src/direct/|core/test/unit/spec/misc/|src/layout/component/form/|core/examples/|src/grid/feature/|src/layout/container/|src/grid/column/|src/picker/|src/window/|src/selection/|src/tree/|src/chart/|src/core/examples/|src/draw/|core/src/dom/|core/examples/src/Sample/notdeadlock/|core/src/lang/|src/layout/component/|src/layout/container/boxOverflow/|src/fx/target/|src/core/test/unit/resources/|core/test/unit/resources/|src/tip/|src/core/src/env/|src/core/test/unit/spec/env/|src/fx/|core/examples/src/Sample/|src/form/|src/core/examples/src/Sample/|core/examples/src/Sample/ability/|src/|src/core/src/version/|core/src/env/|src/tree/plugin/|src/core/src/class/|core/test/unit/spec/lang/|locale/|src/chart/series/|src/core/test/unit/spec/class/|src/core/examples/src/Sample/ability/|src/core/examples/src/Sample/deadlock/|src/slider/|src/panel/|src/tab/|src/core/src/dom/|core/src/class/|src/state/|src/dd/|src/container/|src/core/src/|core/test/unit/spec/dom/|src/core/src/util/|src/core/test/unit/spec/dom/|src/grid/|src/core/src/lang/|src/draw/engine/|src/core/test/unit/spec/util/|src/grid/plugin/|core/src/misc/|core/src/version/|src/chart/axis/|src/data/|core/src/util/|core/examples/src/Sample/deadlock/|src/scaffold/|src/layout/|src/core/examples/src/Sample/notdeadlock/|src/resizer/|core/test/unit/spec/util/|core/src/|core/test/unit/spec/class/|src/form/action/|builds/" kind="src" path="_attachments/ext"/>
+	<classpathentry kind="src" path="_attachments/ext/builds"/>
+	<classpathentry excluding="src/Sample/notdeadlock/|src/Sample/|src/Sample/ability/|src/Sample/deadlock/" kind="src" path="_attachments/ext/core/examples"/>
+	<classpathentry excluding="notdeadlock/|ability/|deadlock/" kind="src" path="_attachments/ext/core/examples/src/Sample"/>
+	<classpathentry kind="src" path="_attachments/ext/core/examples/src/Sample/ability"/>
+	<classpathentry kind="src" path="_attachments/ext/core/examples/src/Sample/deadlock"/>
+	<classpathentry kind="src" path="_attachments/ext/core/examples/src/Sample/notdeadlock"/>
+	<classpathentry excluding="dom/|lang/|env/|class/|misc/|version/|util/" kind="src" path="_attachments/ext/core/src"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/class"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/dom"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/env"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/lang"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/misc"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/util"/>
+	<classpathentry kind="src" path="_attachments/ext/core/src/version"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/resources"/>
+	<classpathentry excluding="version/|env/|misc/|lang/|dom/|util/|class/" kind="src" path="_attachments/ext/core/test/unit/spec"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/class"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/dom"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/env"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/lang"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/misc"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/util"/>
+	<classpathentry kind="src" path="_attachments/ext/core/test/unit/spec/version"/>
+	<classpathentry kind="src" path="_attachments/ext/locale"/>
+	<classpathentry kind="src" path="_attachments/ext/pkgs"/>
+	<classpathentry excluding="chart/theme/|core/test/unit/spec/lang/|button/|core/test/unit/spec/|menu/|view/|toolbar/|util/|core/test/unit/spec/misc/|core/test/unit/spec/version/|core/src/misc/|direct/|layout/component/form/|grid/feature/|layout/container/|grid/column/|picker/|window/|selection/|tree/|chart/|core/examples/|draw/|layout/component/|layout/container/boxOverflow/|fx/target/|core/test/unit/resources/|tip/|core/src/env/|core/test/unit/spec/env/|fx/|form/|core/examples/src/Sample/|core/src/version/|tree/plugin/|core/src/class/|chart/series/|core/test/unit/spec/class/|core/examples/src/Sample/ability/|core/examples/src/Sample/deadlock/|slider/|panel/|tab/|core/src/dom/|state/|dd/|container/|core/src/|core/src/util/|core/test/unit/spec/dom/|grid/|core/src/lang/|draw/engine/|core/test/unit/spec/util/|grid/plugin/|chart/axis/|data/|scaffold/|layout/|core/examples/src/Sample/notdeadlock/|resizer/|form/action/" kind="src" path="_attachments/ext/src"/>
+	<classpathentry kind="src" path="_attachments/ext/src/button"/>
+	<classpathentry excluding="theme/|series/|axis/" kind="src" path="_attachments/ext/src/chart"/>
+	<classpathentry kind="src" path="_attachments/ext/src/chart/axis"/>
+	<classpathentry kind="src" path="_attachments/ext/src/chart/series"/>
+	<classpathentry kind="src" path="_attachments/ext/src/chart/theme"/>
+	<classpathentry kind="src" path="_attachments/ext/src/container"/>
+	<classpathentry excluding="src/Sample/|src/Sample/ability/|src/Sample/deadlock/|src/Sample/notdeadlock/" kind="src" path="_attachments/ext/src/core/examples"/>
+	<classpathentry excluding="ability/|deadlock/|notdeadlock/" kind="src" path="_attachments/ext/src/core/examples/src/Sample"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/examples/src/Sample/ability"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/examples/src/Sample/deadlock"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/examples/src/Sample/notdeadlock"/>
+	<classpathentry excluding="misc/|env/|version/|class/|dom/|util/|lang/" kind="src" path="_attachments/ext/src/core/src"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/class"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/dom"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/env"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/lang"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/misc"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/util"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/src/version"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/resources"/>
+	<classpathentry excluding="lang/|misc/|version/|env/|class/|dom/|util/" kind="src" path="_attachments/ext/src/core/test/unit/spec"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/class"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/dom"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/env"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/lang"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/misc"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/util"/>
+	<classpathentry kind="src" path="_attachments/ext/src/core/test/unit/spec/version"/>
+	<classpathentry kind="src" path="_attachments/ext/src/data"/>
+	<classpathentry kind="src" path="_attachments/ext/src/dd"/>
+	<classpathentry kind="src" path="_attachments/ext/src/direct"/>
+	<classpathentry excluding="engine/" kind="src" path="_attachments/ext/src/draw"/>
+	<classpathentry kind="src" path="_attachments/ext/src/draw/engine"/>
+	<classpathentry excluding="action/" kind="src" path="_attachments/ext/src/form"/>
+	<classpathentry kind="src" path="_attachments/ext/src/form/action"/>
+	<classpathentry excluding="target/" kind="src" path="_attachments/ext/src/fx"/>
+	<classpathentry kind="src" path="_attachments/ext/src/fx/target"/>
+	<classpathentry excluding="feature/|column/|plugin/" kind="src" path="_attachments/ext/src/grid"/>
+	<classpathentry kind="src" path="_attachments/ext/src/grid/column"/>
+	<classpathentry kind="src" path="_attachments/ext/src/grid/feature"/>
+	<classpathentry kind="src" path="_attachments/ext/src/grid/plugin"/>
+	<classpathentry excluding="component/form/|container/|component/|container/boxOverflow/" kind="src" path="_attachments/ext/src/layout"/>
+	<classpathentry excluding="form/" kind="src" path="_attachments/ext/src/layout/component"/>
+	<classpathentry kind="src" path="_attachments/ext/src/layout/component/form"/>
+	<classpathentry excluding="boxOverflow/" kind="src" path="_attachments/ext/src/layout/container"/>
+	<classpathentry kind="src" path="_attachments/ext/src/layout/container/boxOverflow"/>
+	<classpathentry kind="src" path="_attachments/ext/src/menu"/>
+	<classpathentry kind="src" path="_attachments/ext/src/panel"/>
+	<classpathentry kind="src" path="_attachments/ext/src/picker"/>
+	<classpathentry kind="src" path="_attachments/ext/src/resizer"/>
+	<classpathentry kind="src" path="_attachments/ext/src/scaffold"/>
+	<classpathentry kind="src" path="_attachments/ext/src/selection"/>
+	<classpathentry kind="src" path="_attachments/ext/src/slider"/>
+	<classpathentry kind="src" path="_attachments/ext/src/state"/>
+	<classpathentry kind="src" path="_attachments/ext/src/tab"/>
+	<classpathentry kind="src" path="_attachments/ext/src/tip"/>
+	<classpathentry kind="src" path="_attachments/ext/src/toolbar"/>
+	<classpathentry excluding="plugin/" kind="src" path="_attachments/ext/src/tree"/>
+	<classpathentry kind="src" path="_attachments/ext/src/tree/plugin"/>
+	<classpathentry kind="src" path="_attachments/ext/src/util"/>
+	<classpathentry kind="src" path="_attachments/ext/src/view"/>
+	<classpathentry kind="src" path="_attachments/ext/src/window"/>
+	<classpathentry kind="src" path="_attachments/js"/>
+	<classpathentry kind="src" path="evently/items/_changes"/>
+	<classpathentry kind="src" path="evently/profile/profileReady/selectors/form"/>
+	<classpathentry kind="src" path="lists"/>
+	<classpathentry excluding="vendor/couchapp/lib/|vendor/couchapp/evently/profile/profileReady/|vendor/couchapp/evently/profile/loggedOut/|vendor/couchapp/evently/account/signupForm/selectors/form/|vendor/couchapp/evently/account/loggedIn/|vendor/couchapp/evently/profile/noProfile/selectors/form/|vendor/couchapp/evently/account/loginForm/|vendor/couchapp/evently/account/signupForm/|vendor/couchapp/_attachments/|vendor/couchapp/evently/profile/noProfile/|vendor/couchapp/evently/account/|vendor/couchapp/evently/account/loginForm/selectors/form/|vendor/couchapp/evently/profile/" kind="src" path="updates"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/_attachments"/>
+	<classpathentry excluding="signupForm/selectors/form/|loggedIn/|loginForm/|signupForm/|loginForm/selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/loggedIn"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account/loginForm"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/loginForm/selectors/form"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/account/signupForm"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/account/signupForm/selectors/form"/>
+	<classpathentry excluding="profileReady/|loggedOut/|noProfile/selectors/form/|noProfile/" kind="src" path="updates/vendor/couchapp/evently/profile"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/loggedOut"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="updates/vendor/couchapp/evently/profile/noProfile"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/noProfile/selectors/form"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/evently/profile/profileReady"/>
+	<classpathentry kind="src" path="updates/vendor/couchapp/lib"/>
+	<classpathentry kind="src" path="vendor/couchapp/_attachments"/>
+	<classpathentry excluding="signupForm/|loginForm/selectors/form/|loginForm/|signupForm/selectors/form/|loggedIn/" kind="src" path="vendor/couchapp/evently/account"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/loggedIn"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/account/loginForm"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/loginForm/selectors/form"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/account/signupForm"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/account/signupForm/selectors/form"/>
+	<classpathentry excluding="profileReady/|noProfile/|loggedOut/|noProfile/selectors/form/" kind="src" path="vendor/couchapp/evently/profile"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/loggedOut"/>
+	<classpathentry excluding="selectors/form/" kind="src" path="vendor/couchapp/evently/profile/noProfile"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/noProfile/selectors/form"/>
+	<classpathentry kind="src" path="vendor/couchapp/evently/profile/profileReady"/>
+	<classpathentry kind="src" path="vendor/couchapp/lib"/>
+	<classpathentry kind="src" path="views/categories"/>
+	<classpathentry kind="src" path="views/none_category"/>
+	<classpathentry kind="src" path="views/questions"/>
+	<classpathentry kind="src" path="views/questions_list"/>
+	<classpathentry kind="src" path="views/recent-items"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
