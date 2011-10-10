@@ -1,4 +1,7 @@
 //On startup for document
+/*
+ * THIS FILE CONTAINS OLD BROKEN SHIT PLEASE DO NOT USE THE COUCH (.COUCH.) 
+ */
 jQuery(document).ready(function($) {
 
     //set the database name for the application. This needs to be fixed. So it will be automatic.

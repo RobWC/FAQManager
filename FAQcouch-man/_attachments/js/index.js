@@ -101,7 +101,8 @@ $(document).ready(function() {
         buttons: {
             "Save Changes": function() {
                 //define content
-                var documentUpdate = FAQ.newEmptyDocument();
+                var documentUpdate = new Record();
+                documentUpdate.refreshData();
                 //grab question content
                 if ($('#dialogContent #dialogQuestion textarea').val() && $('#dialogContent #dialogQuestion textarea').val() != '' && $('#dialogContent #dialogQuestion textarea').val() != null) {
                     documentUpdate.question = $('#dialogContent #dialogQuestion textarea').val();
@@ -126,7 +127,9 @@ $(document).ready(function() {
                 } else {
                     documentUpdate.category.push('None');
                 };
-
+                //set user and time
+                //grab user data
+                //grab time                
                 documentUpdate._rev = $('#dialogContent').attr('data-rev');
                 documentUpdate._id = $('#dialogContent').attr('data-id');
                 //send the final updatee
@@ -134,25 +137,16 @@ $(document).ready(function() {
                 options.error = function() {
                     alert('unable to save update');
                 };
-                $.couch.db(dataName).saveDoc(documentUpdate, options);
+                documentUpdate.save();
                 console.log(documentUpdate);
                 $('#save-dialog').dialog("open");
                 //refresh source line
                 //select element by id
                 //empty question
-                $('tr[id="' + documentUpdate._id + '"] td[id="question"]').empty().fadeOut('slow');
-                $('tr[id="' + documentUpdate._id + '"] td[id="question"]').append(documentUpdate.question).fadeIn('slow');
-                //empty answer
-                $('tr[id="' + documentUpdate._id + '"] td[id="answer"]').empty().fadeOut('slow');
-                $('tr[id="' + documentUpdate._id + '"] td[id="answer"]').append(documentUpdate.answer).fadeIn('slow');
-                //empty category
-                $('tr[id="' + documentUpdate._id + '"] td[id="category"]').empty().fadeOut('slow');
-                $('tr[id="' + documentUpdate._id + '"] td[id="category"]').append(documentUpdate.category).fadeIn('slow');
                 //fade in update of each
                 $('#dialogContent #dialogAnswer textarea').val('');
                 $('#dialogContent #dialogQuestion textarea').val('');
                 $('div#dialogCategory ol#selectable li.ui-selected').removeClass('ui-selected');
-
             },
             "Clear": function() {
                 $('#dialog div#dialogContent div#dialogQuestion textarea').val('');

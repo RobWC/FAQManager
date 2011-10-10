@@ -22,13 +22,14 @@ body, html {
 #main-content {
     width: 1025px;
     margin:0 auto;
+    background-color: #E8E8E8;
 }
 #div-aside-panel {
     margin-top: 10px
     border-top: 1px solid #496176;
     border-bottom: 1px solid #2E4958;
     padding: 5px;
-    min-height: 800px;
+    min-height: 440px;
     width: 380px;
     background-color: #3399FF;
     font-size: 12px;
@@ -54,6 +55,20 @@ body, html {
 #footer {
     clear:both;
     background:#cc9;
+}
+footer ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+footer li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+.aside-footer{
+	 list-style-type: none;
+	 left: 150px;
 }
 table {
     font-size: 75%;
@@ -196,20 +211,34 @@ article.record ul li {
 .starting-aside {
     display: none;
 }
+.hidden  {
+	display: none;
+}
 .aside-question{
 	padding-left: 10px;
 	padding right: 10px;
 	padding-bottom: 10px;
+	min-height: 100px;
 }
 .aside-answer{
 	padding-left: 10px;
     padding right: 10px;
 	padding-top: 10px;
+	min-height: 250px;
+}
+.aside-category{
+    padding-left: 10px;
+    padding right: 10px;
+    padding-top: 10px;
+    min-height: 20px;
 }
 .addUserForm {
   width: 100%;
   height: 100%;
   padding: 5px;
+}
+.infoButton {
+	
 }
 /* webkit specifics */
 ::-webkit-scrollbar {
