@@ -1,6 +1,6 @@
 //file that contains all of the shared fuctions used in the tool
-var databaseName = new String('faqman');
-var dataName = new String('faq');
+var databaseName = 'faqman';
+var dataName = 'faq';
 
 function Record(_id) {
     if (_id != null || _id != undefined) {
@@ -475,7 +475,7 @@ var FAQ = {
             
             $("button#submit").button();
             $("button#submit").click(function(){
-                FAQ.handleSubmit();        
+                FAQ.handleSubmit();
             });
             
             $("button#clear").button();
@@ -507,6 +507,7 @@ var FAQ = {
         $('#query').val('');
     },
     handleSubmit: function() {
+    	console.log('handle submit');
         var queryValue = $("#query").val();
         var queryToStore = new Object();
         queryToStore.type = 'query';
@@ -515,30 +516,51 @@ var FAQ = {
         var options = new Object();
         options.error = function() { alert('Could not save document!')};
         
-        //$.couch.db('queries-store').saveDoc(queryToStore, options);
-        //save search query in the queries dd
+        //delete no results
+        $('#scrollie #no-results').remove();
         
-        $.getJSON('/' + dataName + '/_fti/_design/search/complete?q=' + queryValue, function(data) {
-            var rows = new Array();
-            rows = data.rows;
-            if (rows == undefined || rows == null || rows.length == 0) {
-                $("#scrollie").append('No Results Found');
-            } else {
-                var i;
-                for (i in rows){
-                    var newRecord = new Record(rows[i].id);
-                    newRecord.refreshData();
-                    if (i == 0) {
-                        $('#scrollie').append(newRecord.toArticle().addClass('first'));
-                    } else if (i == (rows.length - 1)) {
-                        $('#scrollie').append(newRecord.toArticle().addClass('last'));
+        $('#details').fadeOut('slow',function(){
+            $('#details').empty();
+            $('#details').fadeIn();
+            $('#scrollie').fadeOut('slow',function(){
+                $('#scrollie').empty();
+                $('#scrollie').fadeIn();
+              //$.couch.db('queries-store').saveDoc(queryToStore, options);
+                //save search query in the queries dd
+                
+                $.getJSON('/' + dataName + '/_fti/_design/search/complete?q=' + queryValue, function(data) {
+                	console.log('making query');
+                    var rows = new Array();
+                    rows = data.rows;
+                    if (rows == undefined || rows == null || rows.length == 0) {
+                        $("#scrollie").append($('<div/>',{id:'no-results'}).append('No Results Found'));
                     } else {
-                        $('#scrollie').append(newRecord.toArticle());
-                    };
-                };
-                $('#scrollie').toggleClass('overflow');
-            }
-       });  
+                        var i;
+                        for (i in rows){
+                            var newRecord = new Record(rows[i].id);
+                            newRecord.refreshData();
+                            if (i == 0) {
+                                $('#scrollie').append(newRecord.toArticle().addClass('first'));
+                            } else if (i == (rows.length - 1)) {
+                                $('#scrollie').append(newRecord.toArticle().addClass('last'));
+                            } else {
+                                $('#scrollie').append(newRecord.toArticle());
+                            };
+                        };
+                        //check to see if overflow is enabled
+                        if ($('#scrollie').hasClass('overflow')) {
+                        	//overflow is enabled do nothing
+                        } else {
+                        	//enable overflow
+                            $('#scrollie').toggleClass('overflow');
+                        }
+                    }
+               });  
+            });
+        });
+        
+        
+        
     },
     //used to delete a document from the grid view
     newEmptyDocument: function() {
