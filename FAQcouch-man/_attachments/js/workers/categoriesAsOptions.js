@@ -56,7 +56,6 @@ self.addEventListener('message', function(e) {
 					for (var i in info) { 	      		
 						returnInfo.push('<option value="' + info[i].value.categoryName + '">' + info[i].value.categoryName + '</option>');
 					};
-					returnInfo.push('FAIL');
 					self.postMessage(returnInfo);
 				};
 			};

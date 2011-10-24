@@ -4,10 +4,20 @@ body, html {
     padding:0;
     color:#000;
     /*background:#a7a09a;*/
-    overflow: hidden
+    overflow: hidden;
 }
 #header {
-    background-color: #E8E8E8;
+	display: inline;
+	width: 100%;
+	padding-left: 20px;
+	padding-right 20px;
+    background-color: #000000;
+    z-index:10;
+    position: relative;
+    -webkit-border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
 }
 #header ul{
     margin: 0;
@@ -20,16 +30,40 @@ body, html {
     padding: 0;
 }
 #main-content {
-    width: 1025px;
+    width: 100%;
     margin:0 auto;
-    background-color: #E8E8E8;
+    background-color: #000000;
+}
+#management-links {
+	float: right;
+}
+#management-links a img {
+    padding: 5px;
+}
+#mylogin {
+	float: right;
+}
+#mylogin a {
+	   color: #FFFFFF;
+	
+}
+.search-text {
+       color: #FFFFFF;
+}
+#scroll-content {
+	position: fixed;
+	width: 100%;
+	z-index:1;
+}
+#div-details {
+	position: fixed;
 }
 #div-aside-panel {
-    margin-top: 10px
+    margin-top: 10px;
     border-top: 1px solid #496176;
     border-bottom: 1px solid #2E4958;
     padding: 5px;
-    min-height: 800px;
+    min-height: 600px;
     width: 380px;
     background-color: #3399FF;
     font-size: 12px;
@@ -37,9 +71,17 @@ body, html {
     color: white;
     font-family: Arial, sans-serif;
     background-image: -webkit-gradient(linear, 0 top, 0 bottom, from(#496178), to(#2E4960));
-    -moz-border-radius: 0px 10px 10px 0px;
     -webkit-border-radius: 0px 10px 10px 0px;
     border-radius: 0px 10px 10px 0px;
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+.aside-edit {
+	width: 370px;
+    height: 140px;
+    resize: none;
 }
 #records {
     min-height:800;
@@ -49,8 +91,11 @@ body, html {
 }
 #details{
     margin-top: 10px;
-    float: right;
     width: 400px;
+    left: 615px;
+    overflow: visible;
+    position: relative;
+    z-index:4;
 }
 #footer {
     clear:both;
@@ -69,6 +114,9 @@ footer li {
 .aside-footer{
 	 list-style-type: none;
 	 left: 150px;
+}
+#chrome-only {
+	float:right;
 }
 table {
     font-size: 75%;
@@ -118,10 +166,6 @@ textarea {
     background-color: #faff00;
 }
 #feedback { font-size: 1.4em; }
-#selectable .ui-selecting { background: #FECA40; }
-#selectable .ui-selected { background: #F39814; color: white; }
-#selectable { list-style-type: none; margin: 0; padding: 0; width: 650px; }
-#selectable li { margin: 1px; padding: 1px; float: left; width: 80px; height: 50px;  font-size: 8pt; text-align: center; text-wrap: normal; }
 div.search-entry {
     text-align: center;
 }
@@ -179,6 +223,10 @@ article.record #category {
     margin: 10px;
     height: 20px;
 }
+article.record #last-update {
+    margin: 10px;
+    height: 20px;
+}
 article.record footer {
     min-height: 20px;
     margin-top: 5px;
@@ -203,10 +251,9 @@ article.record ul li {
     display: inline;
 }
 .overflow {
-    max-height: 800px;
     overflow-x: hidden;
     word-wrap: break-word;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .starting-aside {
     display: none;
@@ -237,19 +284,24 @@ article.record ul li {
   height: 100%;
   padding: 5px;
 }
+.ninjafaq {
+	float: left;
+	padding-left: 10px;
+	padding-top: 10px;
+	color: #FFFFFF;
+	margin-top: 0px;
+}
 .infoButton {
 	
 }
 /* webkit specifics */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px #3399FF;
     border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px #3399FF;
 }

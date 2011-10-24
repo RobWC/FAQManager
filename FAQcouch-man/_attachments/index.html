@@ -2,28 +2,67 @@
 <html>
 <head>
   <title>NinjaFAQ Dashboard</title>
-  <script src="vendor/couchapp/loader.js" type="text/javascript"></script>
-  <script src="js/jquery.couchLogin.js" type="text/javascript"></script>
-  <script src="js/common.js" type="text/javascript"></script>
-  <script src="js/jquery.flip.min.js" type="text/javascript"></script>
-  <script src="js/jquery.multiselect.min.js" type="text/javascript"></script>
-  <script src="js/jquery.multiselect.filter.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.css">
+  <script data-main="scripts/main.js" src="scripts/require-jquery.js"></script>
+  <link rel="stylesheet" href="css/smoothness/jquery-ui-1.8.16.custom.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.css">
   <link rel="stylesheet" type="text/css" href="css/jquery.multiselect.filter.css">
 </head>
 <body>
-  <script src="js/index.js" type="text/javascript"></script>
   <div id="main-content">
     <div id="header">
   
         <div id="mylogin"></div>
         
-        <div id="dialog" title="Add Record">
+        <div id="management-links" class="management-links">
+        </div>
+        
+        <!-- 
+        <div id="chrome-only">
+            <a href="http://www.google.com/chrome" alt="Google Chrome"><img src="images/chrome.png"/></a>
+        </div>
+         -->
+        
+        
+        <div id="search">
+        <h1 class="ninjafaq ui-widget title-page">NinjaFAQ</h1>
+        
+        <div id="search-area" class="ui-widget search-entry">
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- main content -->
+    <div id="core-main-content">
+	    <div id="scroll-content">
+		    <section id="records">
+		      <div id="scrollie">
+		      </div>
+		    </section>
+		    <!--side bar -->
+	    </div>
+    
+	    <div id="div-details">
+		    <section id="details">
+		    </section>
+	    </div>
+    </div>
+    
+    
+    <!-- 
+    <div id="footer">
+      <footer>
+      </footer>
+    </div>
+     -->
+     
+     <div id="dialog" title="Add Record" style="display: none">
           <div id="dialogContent">
             <form id="newRecordForm">
               Question: <div id="dialogQuestion"><textarea id="question" name="question"></textarea></div><br/>
               Answer:   <div id="dialogAnswer"><textarea id="answer" name="answer"></textarea></div><br/>
-              Category: <div id="dialogCategory"></div>
+              Category: <div id="dialogCategory"><select id="dialog-cat-sel" size="5" name="ed-cat-sel" class="" multiple="multiple" style="display: none;"></select></div>
             </form>
           </div>
           <div id="save-dialog" title="Save Status">
@@ -31,36 +70,17 @@
           </div>
         </div>
         
-        <div id="management-links" class="management-links">
-        </div>
+        <div id="category-dialog" title="Add Category" style="display: none">
+            <div id="dialogContent">
+                <form id="newCategoryForm">
+                    Category Name: <div id="new-cat-name-div"><input id="new-cat-name" type="text"/></div>
+                </form>
+            </div>
+            <div id="category-save-dialog" title="Save Status">
+                <p>Category successfully saved</p>
+            </div> 
+         </div>
         
-        <div id="search">
-        <h1 class="ui-widget title-page">NinjaFAQ</h1>
-        
-        <div id="search-area" class="ui-widget search-entry">
-        </div>
-        
-        <div class="ui-widget stats-box" id="stats-box">
-          <table id="stats">
-          </table>
-        
-        </div>
-      </div>
-    </div>
-    
-    <!-- main content -->
-    <section id="records">
-      <div id="scrollie">
-      </div>
-    </section>
-    <!--side bar -->
-    <section id="details">
-    </section>
-    
-    <div id="footer">
-      <footer>
-      </footer>
-    </div>
     
   </div>
 </body>
