@@ -47,6 +47,9 @@ body, html {
 	   color: #FFFFFF;
 	
 }
+#search-area {
+	padding-top: 10px;
+}
 .search-text {
        color: #FFFFFF;
 }
